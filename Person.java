@@ -5,6 +5,12 @@ public abstract class Person {
 	protected String email;
 	protected String phoneNo;
 	
+	public Person(String firstName, String lastName, String email, String phoneNo) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.phoneNo = phoneNo;
+	}
 	public String getFirstName() {
 		return firstName;
 	}

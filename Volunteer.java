@@ -7,13 +7,23 @@ public class Volunteer extends Person {
 	
 	public Volunteer(String firstName, String lastName, String email, String phoneNo, String teacher, 
 			String preferredSchool, boolean isCurry, boolean isSpanishSpeaking) {
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.email = email;
-		this.phoneNo = phoneNo;
+		super(firstName, lastName, email, phoneNo);
 		this.isSpanishSpeaking = isSpanishSpeaking; 
 		this.preferredSchool = preferredSchool;
 		this.isCurry = isCurry; 
 		this.teacher = teacher;
 	}
+	public boolean getSpanish() {
+		return isSpanishSpeaking;
+	}
+	public String getPreferredSchool() {
+		return preferredSchool;
+	}
+	public boolean getCurry() {
+		return isCurry;
+	}
+	public String getTeacher() {
+		return teacher;
+	}
+	
 }
