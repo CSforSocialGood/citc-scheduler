@@ -2,16 +2,20 @@
 public class Volunteer extends Person {
 	private boolean isSpanishSpeaking; 
 	private String preferredSchool;
-	private boolean isCurry; 
-	private String teacher;
-	
-	public Volunteer(String firstName, String lastName, String email, String phoneNo, String teacher, 
+	private boolean isCurry;
+
+	/*
+	A reference to the Teacher to whom this volunteer is assigned.
+	This will be null if the Volunteer has not yet been assigned to a Teacher.
+	 */
+	private Teacher teacher;
+
+	public Volunteer(String firstName, String lastName, String email, String phoneNo,
 			String preferredSchool, boolean isCurry, boolean isSpanishSpeaking) {
 		super(firstName, lastName, email, phoneNo);
 		this.isSpanishSpeaking = isSpanishSpeaking; 
 		this.preferredSchool = preferredSchool;
 		this.isCurry = isCurry; 
-		this.teacher = teacher;
 	}
 	public boolean getSpanish() {
 		return isSpanishSpeaking;
@@ -22,8 +26,12 @@ public class Volunteer extends Person {
 	public boolean getCurry() {
 		return isCurry;
 	}
-	public String getTeacher() {
+	public Teacher getTeacher() {
 		return teacher;
+	}
+
+	public void setTeacher(Teacher teacher) {
+		this.teacher = teacher;
 	}
 	
 }

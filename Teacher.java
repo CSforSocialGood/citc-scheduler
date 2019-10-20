@@ -1,12 +1,31 @@
+import java.util.ArrayList;
 
 public class Teacher extends Person {
 	private String school;
+	/*
+	An ArrayList of volunteers who have been assigned to this teacher.
+	 */
+
+	private ArrayList<Volunteer> assignedVolunteers;
 
 	public Teacher(String firstName, String lastName, String email, String phoneNo, String school) {
 		super(firstName, lastName, email, phoneNo);
 		this.school = school;
+		this.assignedVolunteers = new ArrayList<Volunteer>();
 	}
 	public String getSchool() {
 		return school;
+	}
+	public ArrayList<Volunteer> getAssignedVolunteers() {
+	    return this.assignedVolunteers;
+	}
+
+	/*
+	Adds a Volunteer to this Teacher's list of assigned volunteers and updates the Volunteer's Teacher field
+	to reference this Teacher.
+	 */
+	public void assignVolunteer(Volunteer v) {
+		this.assignedVolunteers.add(v);
+		v.setTeacher(this);
 	}
 }
