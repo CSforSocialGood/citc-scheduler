@@ -25,8 +25,8 @@ public class Scheduler {
             for(Driver d : driversRemaining) {
                 if(true /* driver.getAvailability().isAvailable(teacher.availability) */) {
                     currentTeacher += 1;
-                    // assign this driver to that teacher
-                    // remove this driver from driversRemaining
+                    teachers.get(currentTeacher % teachers.size()).assignVolunteer(d);
+                    driversRemaining.remove(d);
                     break;
                 }
             }
