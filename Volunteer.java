@@ -39,9 +39,12 @@ public class Volunteer extends Person implements Comparable {
 		if(o instanceof Volunteer) {
 			Volunteer x = (Volunteer) o;
 			if(this.isCurry && x.isCurry==false) {
-				return 1;
+				return -1;
+			}
+			if(this.isCurry == x.isCurry) {
+				return 0; 
 			}
 		}
-		return 0;
+		return 1;
 	}
 }
