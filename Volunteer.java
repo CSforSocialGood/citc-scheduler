@@ -1,5 +1,5 @@
 
-public class Volunteer extends Person {
+public class Volunteer extends Person implements Comparable {
 	private boolean isSpanishSpeaking; 
 	private String preferredSchool;
 	private boolean isCurry;
@@ -33,5 +33,15 @@ public class Volunteer extends Person {
 	public void setTeacher(Teacher teacher) {
 		this.teacher = teacher;
 	}
-	
+	@Override
+	public int compareTo(Object o) {
+		// TODO Auto-generated method stub
+		if(o instanceof Volunteer) {
+			Volunteer x = (Volunteer) o;
+			if(this.isCurry && x.isCurry==false) {
+				return 1;
+			}
+		}
+		return 0;
+	}
 }
