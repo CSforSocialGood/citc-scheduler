@@ -3,6 +3,7 @@ public class Volunteer extends Person implements Comparable {
 	private boolean isSpanishSpeaking; 
 	private String preferredSchool;
 	private boolean isCurry;
+	private TimeBlock assignedTime;
 
 	/*
 	A reference to the Teacher to whom this volunteer is assigned.
@@ -33,9 +34,17 @@ public class Volunteer extends Person implements Comparable {
 	public void setTeacher(Teacher teacher) {
 		this.teacher = teacher;
 	}
+
+	public TimeBlock getAssignedTime() {
+		return this.assignedTime;
+	}
+
+	public void setAssignedTime(TimeBlock timeBlock) {
+		this.assignedTime = timeBlock;
+	}
+
 	@Override
 	public int compareTo(Object o) {
-		// TODO Auto-generated method stub
 		if(o instanceof Volunteer) {
 			Volunteer x = (Volunteer) o;
 			if(this.isCurry && x.isCurry==false) {
