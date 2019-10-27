@@ -10,7 +10,24 @@ enum DayOfWeek {
     Tuesday,
     Wednesday,
     Thursday,
-    Friday
+    Friday;
+
+    public static DayOfWeek fromDayName(String dayName) throws IllegalArgumentException {
+        switch(dayName.toLowerCase()) {
+            case "monday":
+                return DayOfWeek.Monday;
+            case "tuesday":
+                return DayOfWeek.Tuesday;
+            case "wednesday":
+                return DayOfWeek.Wednesday;
+            case "thursday":
+                return DayOfWeek.Thursday;
+            case "friday":
+                return DayOfWeek.Friday;
+            default:
+                throw new IllegalArgumentException(String.format("Unrecognized day of week '%s'", dayName));
+        }
+    }
 }
 
 public class Availability {
@@ -59,6 +76,9 @@ public class Availability {
     }
 }
 
+/*
+Helper class to represent a TimeBlock paired with a given DayOfWeek.
+ */
 class TimeBlockAndDay {
     private TimeBlock timeBlock;
     private DayOfWeek day;
