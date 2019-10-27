@@ -9,11 +9,15 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 public class Excel_Input {
-
+	public ArrayList<Teacher> teachers = new ArrayList<Teacher>();
+	public ArrayList<Volunteer> volunteers = new ArrayList<Volunteer>();
+	public ArrayList<Driver> drivers = new ArrayList<Driver>();
+	
+	//availability in 30 minute blocks
 	public static void main(String[] args) {
 		try {
 			StringTokenizer st ;
-	        BufferedReader TSVFile = new BufferedReader(new FileReader("ExampleForm.tsv"));
+	        BufferedReader TSVFile = new BufferedReader(new FileReader("Matching_ Volunteer Info - Curry Drivers.tsv"));
 	        String dataRow;
 
 	        // Read first line (header), do nothing
@@ -26,10 +30,10 @@ public class Excel_Input {
 	            st = new StringTokenizer(dataRow,"\t");
 	            List<String>dataArray = new ArrayList<String>() ;
 	            while(st.hasMoreElements()){
-	                dataArray.add(st.nextElement().toString() + "  ");
+	                dataArray.add(st.nextElement().toString());
 	            }
 	            for (String item:dataArray) { 
-	                System.out.print(item); 
+	                System.out.print(item + "|"); 
 	            }
 	            System.out.println(); // Print the data line.
 	            dataRow = TSVFile.readLine(); // Read next line of data.
@@ -47,5 +51,5 @@ public class Excel_Input {
 			e.printStackTrace();
 		}
 
-    } //main()
+    } 
 }
