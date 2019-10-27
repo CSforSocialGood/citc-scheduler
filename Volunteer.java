@@ -3,6 +3,8 @@ public class Volunteer extends Person implements Comparable {
 	private boolean isSpanishSpeaking; 
 	private String preferredSchool;
 	private boolean isCurry;
+	private Availability availability;
+	private DayOfWeek assignedDay;
 	private TimeBlock assignedTime;
 
 	/*
@@ -16,7 +18,8 @@ public class Volunteer extends Person implements Comparable {
 		super(firstName, lastName, email, phoneNo);
 		this.isSpanishSpeaking = isSpanishSpeaking; 
 		this.preferredSchool = preferredSchool;
-		this.isCurry = isCurry; 
+		this.isCurry = isCurry;
+		this.availability = new Availability();
 	}
 	public boolean getSpanish() {
 		return isSpanishSpeaking;
@@ -38,8 +41,16 @@ public class Volunteer extends Person implements Comparable {
 	public TimeBlock getAssignedTime() {
 		return this.assignedTime;
 	}
+	public DayOfWeek getAssignedDayOfWeek() {
+		return this.assignedDay;
+	}
 
-	public void setAssignedTime(TimeBlock timeBlock) {
+	public Availability getAvailability() {
+		return this.availability;
+	}
+
+	public void setAssignedTime(DayOfWeek day, TimeBlock timeBlock) {
+		this.assignedDay = day;
 		this.assignedTime = timeBlock;
 	}
 
