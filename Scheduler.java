@@ -23,9 +23,11 @@ public class Scheduler {
         int currentTeacher = 0;
         while(driversRemaining.size() > 0) {
             for(Driver d : driversRemaining) {
-                if(true /* driver.getAvailability().isAvailable(teacher.availability) */) {
+                TimeBlockAndDay overlap;
+                if((overlap = d.getAvailability().findOverlap(teachers.get(currentTeacher % teachers.size()).getAvailability())) != null) {
                     currentTeacher += 1;
                     teachers.get(currentTeacher % teachers.size()).assignVolunteer(d);
+                    d.setAssignedTime(overlap.getDay(), overlap.getTimeBlock());
                     driversRemaining.remove(d);
                     break;
                 }
