@@ -7,17 +7,22 @@ public class Teacher extends Person {
 	 */
 
 	private ArrayList<Volunteer> assignedVolunteers;
+	private Availability availability;
 
 	public Teacher(String firstName, String lastName, String email, String phoneNo, String school) {
 		super(firstName, lastName, email, phoneNo);
 		this.school = school;
 		this.assignedVolunteers = new ArrayList<Volunteer>();
+		this.availability = new Availability();
 	}
 	public String getSchool() {
 		return school;
 	}
 	public ArrayList<Volunteer> getAssignedVolunteers() {
 	    return this.assignedVolunteers;
+	}
+	public Availability getAvailability() {
+		return this.availability;
 	}
 
 	/*
