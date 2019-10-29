@@ -4,3 +4,6 @@
 /Driver.class
 /Teacher.class
 /Scheduler.class
+/Availability.class
+/DayOfWeek.class
+/TimeBlock.class
