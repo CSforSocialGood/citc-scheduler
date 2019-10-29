@@ -13,43 +13,123 @@ public class Excel_Input {
 	public ArrayList<Volunteer> volunteers = new ArrayList<Volunteer>();
 	public ArrayList<Driver> drivers = new ArrayList<Driver>();
 	
-	//availability in 30 minute blocks
-	public static void main(String[] args) {
+	public static void makeVolunteers() {
 		try {
 			StringTokenizer st ;
-	        BufferedReader TSVFile = new BufferedReader(new FileReader("Matching_ Volunteer Info - Curry Drivers.tsv"));
-	        String dataRow;
-
-	        // Read first line (header), do nothing
-	        dataRow = TSVFile.readLine();
-	        
-	        // Read second line, execute while loop on it
-	        dataRow = TSVFile.readLine();
-	
-	        while (dataRow != null){
+			BufferedReader TSVFile = new BufferedReader(new FileReader("newVolunteer.tsv"));
+		    String dataRow;
+		    
+		    dataRow = TSVFile.readLine();
+		    dataRow = TSVFile.readLine();
+		    
+		    while (dataRow != null){
 	            st = new StringTokenizer(dataRow,"\t");
-	            List<String>dataArray = new ArrayList<String>() ;
+	            //System.out.println(st.countTokens());
+	            st.nextToken();
+	            
+	            ArrayList<String>dataArray = new ArrayList<String>() ;
+	            
+	            int column = 1;
+	            //boolean print = true;
+	         /* String firstName = "";
+            	String lastName = "";
+            	String email = "";
+            	String phone = "";
+            	String school = "";
+            	boolean isCurry = false;
+            	boolean isSpanish = false;
+            	*/
+	            
 	            while(st.hasMoreElements()){
-	                dataArray.add(st.nextElement().toString());
-	            }
+	                       	  
+	            	String firstName = "";
+	            	String lastName = "";
+	            	String email = "";
+	            	String phone = "";
+	            	String school = "";
+	            	boolean isCurry = false;
+	            	boolean isSpanish = false;
+	            	
+	               
+	                String dataToken = st.nextElement().toString();
+	                dataArray.add(dataToken + column);
+	                
+	                switch(column) {
+	                case 1:
+	                	firstName = dataToken;
+	                	column++;
+	                	continue;
+	                case 2:
+	                	lastName = dataToken;
+	                	column++;
+	                	continue;
+	                case 3:
+	                	email = dataToken;
+	                	column++;
+	                	continue;
+	                case 4: 
+	                	phone = dataToken;
+	                	column++;
+	                	continue;
+	                case 5:
+	                	isCurry = dataToken.equals("No") ? false : true;
+	                	column++;
+	                	continue;
+	                case 6:
+	                	/////monday
+	                	column++;
+	                	continue;
+	                case 7:
+	                	////trues
+	                	column++;
+	                	continue;
+	                case 8:
+	                	////weds
+	                	column++;
+	                	continue;
+	                case 9: 
+	                	////
+	                	column++;
+	                	continue;
+	                case 10:
+	                	////
+	                	column++;
+	                	continue;
+	                case 11: 
+	                	///has car?
+	                	column++;
+	                	continue;
+	                case 12:
+	                	//can be Driver
+	                	column++;
+	                	continue;
+	                case 13: 
+	                	isSpanish = dataToken.equals("No") ? false : true;
+	                	continue;
+	                	
+	                }
+	            }   
+	           
 	            for (String item:dataArray) { 
 	                System.out.print(item + "|"); 
 	            }
 	            System.out.println(); // Print the data line.
 	            dataRow = TSVFile.readLine(); // Read next line of data.
 	        }
+		    
 	        // Close the file once all data has been read.
 	        TSVFile.close();
-	
-	        // End the printout with a blank line.
-	        System.out.println();
-		} 
-		catch (FileNotFoundException e) {
+		    		
+		}catch (FileNotFoundException e) {
 			System.out.println("File not found");
 		} 
 		catch (IOException e) {
 			e.printStackTrace();
 		}
-
-    } 
+	}
+	
+	//availability in 30 minute blocks
+	public static void main(String[] args) {
+		makeVolunteers();
+}
 }
