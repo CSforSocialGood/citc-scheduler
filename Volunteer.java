@@ -4,8 +4,7 @@ public class Volunteer extends Person implements Comparable {
 	private String preferredSchool;
 	private boolean isCurry;
 	private Availability availability;
-	private DayOfWeek assignedDay;
-	private TimeBlock assignedTime;
+	private TimeBlockAndDay assignment;
 
 	/*
 	A reference to the Teacher to whom this volunteer is assigned.
@@ -38,20 +37,16 @@ public class Volunteer extends Person implements Comparable {
 		this.teacher = teacher;
 	}
 
-	public TimeBlock getAssignedTime() {
-		return this.assignedTime;
-	}
-	public DayOfWeek getAssignedDayOfWeek() {
-		return this.assignedDay;
+	public TimeBlockAndDay getAssignment() {
+		return this.assignment;
 	}
 
 	public Availability getAvailability() {
 		return this.availability;
 	}
 
-	public void setAssignedTime(DayOfWeek day, TimeBlock timeBlock) {
-		this.assignedDay = day;
-		this.assignedTime = timeBlock;
+	public void setAssignedTime(TimeBlock timeBlock, DayOfWeek day) {
+	    this.assignment = new TimeBlockAndDay(timeBlock, day);
 	}
 
 	@Override
