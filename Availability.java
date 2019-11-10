@@ -36,33 +36,30 @@ public class Availability {
     public Availability() {
     }
 
-    public TimeBlockAndDay findOverlap(Availability other) {
+    public ArrayList<TimeBlockAndDay> findOverlaps(Availability other) {
+        ArrayList<TimeBlockAndDay> out = new ArrayList<>();
+
         for(DayOfWeek d : DayOfWeek.values()) {
             for(TimeBlock otherBlock : other.getAvailabilityForDay(d)) {
                 for(TimeBlock thisBlock : this.getAvailabilityForDay(d)) {
                     // check if overlap exists between these two blocks
-                    boolean otherStartsWithin = (otherBlock.getStartTime().isAfter(thisBlock.getStartTime()) && otherBlock.getStartTime().isBefore(thisBlock.getEndTime()));
-                    boolean thisStartsWithin = (thisBlock.getStartTime().isAfter(otherBlock.getStartTime()) && thisBlock.getStartTime().isBefore(otherBlock.getEndTime()));
-                    if(otherStartsWithin || thisStartsWithin) {
-                        LocalTime overlapStartTime;
-                        LocalTime overlapEndTime;
-                        if(otherStartsWithin) {
-                            overlapStartTime = otherBlock.getStartTime();
-                        } else {
-                            overlapStartTime = thisBlock.getStartTime();
-                        }
-                        if(otherBlock.getEndTime().isBefore(thisBlock.getEndTime())) {
-                            overlapEndTime = otherBlock.getEndTime();
-                        } else {
-                            overlapEndTime = thisBlock.getEndTime();
-                        }
-
-                        return new TimeBlockAndDay(new TimeBlock(overlapStartTime, overlapEndTime), d);
-                    }
+                    TimeBlock overlap = thisBlock.overlapWith(otherBlock);
+                    if(overlap != null) out.add(new TimeBlockAndDay(overlap, d));
                 }
             }
         }
-        return null;
+
+        return out;
+    }
+
+    public ArrayList<TimeBlock> findOverlaps(TimeBlockAndDay when) {
+        ArrayList<TimeBlock> out = new ArrayList<>();
+        ArrayList<TimeBlock> availabilityForDay = this.getAvailabilityForDay(when.getDay());
+        for(TimeBlock block : availabilityForDay) {
+            TimeBlock overlap = block.overlapWith(when.getTimeBlock());
+            if(overlap != null) out.add(overlap);
+        }
+        return out;
     }
 
     public ArrayList<TimeBlock> getAvailabilityForDay(DayOfWeek day) {
@@ -113,6 +110,35 @@ class TimeBlock {
     public TimeBlock(LocalTime startTime, Duration duration) {
         this.startTime = startTime;
         this.duration = duration;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return (obj instanceof TimeBlock) && ((TimeBlock)obj).getStartTime().equals(this.getStartTime()) && ((TimeBlock)obj).getEndTime().equals(this.getEndTime());
+    }
+
+    public TimeBlock overlapWith(TimeBlock other) {
+        if(this.equals(other)) return new TimeBlock(this.getStartTime(), this.getEndTime());
+
+        boolean otherStartsWithin = (other.getStartTime().isAfter(this.getStartTime()) && other.getStartTime().isBefore(this.getEndTime()));
+        boolean thisStartsWithin = (this.getStartTime().isAfter(other.getStartTime()) && this.getStartTime().isBefore(other.getEndTime()));
+        if (otherStartsWithin || thisStartsWithin) {
+            LocalTime overlapStartTime;
+            LocalTime overlapEndTime;
+            if (otherStartsWithin) {
+                overlapStartTime = other.getStartTime();
+            } else {
+                overlapStartTime = this.getStartTime();
+            }
+            if (other.getEndTime().isBefore(this.getEndTime())) {
+                overlapEndTime = other.getEndTime();
+            } else {
+                overlapEndTime = this.getEndTime();
+            }
+
+            return new TimeBlock(overlapStartTime, overlapEndTime);
+        }
+        return null;
     }
 
     /*
