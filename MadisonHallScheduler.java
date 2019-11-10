@@ -87,7 +87,7 @@ public class MadisonHallScheduler extends JFrame implements ActionListener {
 			messageSubmit.setHorizontalAlignment(JLabel.CENTER);
 			panel3.add(messageSubmit);
 	
-			JButton submit = new JButton("Submit"); 
+			JButton submit = new JButton("SUBMIT"); 
 			submit.addActionListener(this);
 			submit.setBackground(new Color(38, 166, 91));  // Light pink: 244, 121, 131
 			submit.setFont(new Font("Century Gothic", Font.PLAIN, 18));
@@ -110,6 +110,9 @@ public class MadisonHallScheduler extends JFrame implements ActionListener {
 		else if (action.equals("Select File 3")) { 
 			setSelectedField(2);
 		}
+		else if (action.equals("SUBMIT")) { 
+			calledSubmit();
+		}
 	}
 	public void setSelectedField(int i) {
 		// create an object of JFileChooser class 
@@ -119,15 +122,27 @@ public class MadisonHallScheduler extends JFrame implements ActionListener {
 		int r = j.showSaveDialog(null); 
 
 		// if the user selects a file 
-		if (r == JFileChooser.APPROVE_OPTION) 
-
-		{ 
+		if (r == JFileChooser.APPROVE_OPTION) { 
 			// set the label to the path of the selected file 
 			fileFields[i].setText(j.getSelectedFile().getAbsolutePath()); 
 		} 
 		// if the user cancelled the operation 
-		else
+		else {
 			JOptionPane.showMessageDialog(null,"User cancelled file input");
+		}
+	}
+	public void calledSubmit() {
+		// Check if inputs exist and are valid
+		for(int i=0; i<3; i++) {
+			if(fileFields[i].getText().equals("")) {
+				JOptionPane.showMessageDialog(null,"Not all file paths were entered!");
+				break;
+			}
+			if(fileFields[i].getText().contains(".tsv")==false) {
+				JOptionPane.showMessageDialog(null,"Not all files are tsvs!");
+				break;
+			}
+		}
 	}
 	public static void main(String[] args) throws IOException
 	{
