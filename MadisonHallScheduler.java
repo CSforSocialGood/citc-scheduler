@@ -16,6 +16,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
 
 @SuppressWarnings("serial")
@@ -32,37 +33,48 @@ public class MadisonHallScheduler extends JFrame implements ActionListener {
 		background = new Color(255, 250, 245); // 230, 230, 250 <- off white //255, 250, 245 <- slight lavender 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLayout(new BorderLayout());
+		
+		// Panel 1 --> Holds the title & directions text
 		JPanel panel1 = new JPanel();
-			//panel1.setMaximumSize(new Dimension(width, height));
 			panel1.setLayout(new GridLayout(3,1));
+			// Title
 			JLabel title = new JLabel("Cavs in The Classroom Scheduler");
 			title.setFont(new Font("Times New Roman", Font.BOLD, 20));
 			title.setHorizontalAlignment(JLabel.CENTER);
 			panel1.add(title);
-			JLabel message = new JLabel("<HTML><center>Please download all of your Excel/Google Drive Sheets as TSV files! "
+			
+			// Directions for submitting files 
+			JLabel directions = new JLabel("<HTML><center>Please download all of your Excel/Google Drive Sheets as TSV files! "
 					+ "<br> For each sheet below, please select the path of the files on your computer. </center></HTML>");
-			message.setFont(new Font("Times New Roman", Font.ITALIC, 15));
-			message.setHorizontalAlignment(JLabel.CENTER);
-			panel1.add(message);
+			directions.setFont(new Font("Times New Roman", Font.ITALIC, 15));
+			directions.setHorizontalAlignment(JLabel.CENTER);
+			panel1.add(directions);
+			
+			//Set background color
 			panel1.setBackground(background);
 		add(panel1,BorderLayout.NORTH);
 
+		// Panel 2 --> input fields and buttons for file inputs
 		JPanel panel2 = new JPanel();
 			panel2.setLayout(new GridLayout(3,5, 20, 20));
-			panel2.setMaximumSize(new Dimension(width*1/3, height));
-	
+			
+			// Initialize labels, fields, and button arrays
 			JLabel[] messageFile = new JLabel[3];
 			fileFields = new JTextField[3];
 			b = new JButton[3];
 	
+			// Set the text of each label
 			messageFile[0] = new JLabel("Teachers: ");
 			messageFile[1] = new JLabel("Curry & New Volunteers: ");
 			messageFile[2] = new JLabel("Returning Volunteers: ");
 	
+			// Initialize each element and format it equally
 			for(int i=0; i<3; i++) {
+				// Field initialization and formatting 
 				fileFields[i] = new JTextField("");
 				fileFields[i].setBorder(new LineBorder(Color.BLACK, 2));
 				fileFields[i].setEditable(false);
+				// Button initialization and formatting
 				b[i] = new JButton("Select File " + (i+1));
 				b[i].addActionListener(this);
 				b[i].setBackground(new Color(66,165, 245));
@@ -70,8 +82,10 @@ public class MadisonHallScheduler extends JFrame implements ActionListener {
 				b[i].setForeground(Color.WHITE);
 				b[i].setOpaque(true);
 				b[i].setBorderPainted(false);
+				// Label formatting
 				messageFile[i].setFont(new Font("Times New Roman", Font.BOLD, 20));
 				messageFile[i].setHorizontalAlignment(JLabel.CENTER);
+				// Add each elements sequentially so that all of
 				panel2.add(messageFile[i]);
 				panel2.add(fileFields[i]);
 				panel2.add(b[i]);
@@ -79,6 +93,7 @@ public class MadisonHallScheduler extends JFrame implements ActionListener {
 			panel2.setBackground(background);
 		add(panel2,BorderLayout.CENTER);
 
+		// Panel 3 --> Submit button and directions
 		JPanel panel3 = new JPanel();
 			panel3.setBorder(new EmptyBorder(10, 10, 10, 10));
 			panel3.setMaximumSize(new Dimension(50, 50));
@@ -99,11 +114,11 @@ public class MadisonHallScheduler extends JFrame implements ActionListener {
 			panel3.add(submit);
 			panel3.setBackground(background);
 		add(panel3,BorderLayout.SOUTH);
+		// Pack the elements together
 		this.pack();
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
 		String action = e.getActionCommand(); 
 		if (action.equals("Select File 1")) { 
 			setSelectedField(0);
@@ -120,11 +135,11 @@ public class MadisonHallScheduler extends JFrame implements ActionListener {
 	}
 	public void setSelectedField(int i) {
 		// create an object of JFileChooser class 
-		JFileChooser j = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory()); 
-
+		JFileChooser j = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+		j.removeChoosableFileFilter(j.getAcceptAllFileFilter());
+		j.addChoosableFileFilter(new FileNameExtensionFilter("TSV files (*.tsv)", "tsv"));
 		// invoke the showsSaveDialog function to show the save dialog 
-		int r = j.showSaveDialog(null); 
-
+		int r = j.showOpenDialog(null);
 		// if the user selects a file 
 		if (r == JFileChooser.APPROVE_OPTION) { 
 			// set the label to the path of the selected file 
@@ -139,17 +154,20 @@ public class MadisonHallScheduler extends JFrame implements ActionListener {
 		boolean check = true;
 		// Check if inputs exist and are valid
 		for(int i=0; i<3; i++) {
+			// Check if none of the fields are blank
 			if(fileFields[i].getText().equals("")) {
 				JOptionPane.showMessageDialog(null,"Not all file paths were entered!");
 				check = false;
 				break;
 			}
+			// Check if none of the fields are not tsv files
 			if(fileFields[i].getText().contains(".tsv")==false) {
 				JOptionPane.showMessageDialog(null,"Not all files are tsvs!");
 				check = false;
 				break;
 			}
 		}
+		//If checks were passed, then execute the input submission
 		if(check) {
 			//execute Submit
 			String[] fileNames = new String[3];
