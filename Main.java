@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Main {
     public static void main(String[] args) {
-        ArrayList<Driver> sampleDrivers = new ArrayList<Driver>();
+   /*     ArrayList<Driver> sampleDrivers = new ArrayList<Driver>();
         ArrayList<Teacher> sampleTeachers = new ArrayList<Teacher>();
         Teacher t1 = new Teacher("Kevin", "Smith", "email89@example.com", "1234567890", "Virginia");
         t1.getAvailability().addTimeBlock(DayOfWeek.Monday, new TimeBlock(LocalTime.of(7,00), LocalTime.of(15, 00)));
@@ -37,5 +37,13 @@ public class Main {
         Scheduler myScheduler = new Scheduler(sampleDrivers, sampleRiders, sampleTeachers);
         myScheduler.assignDrivers();
         myScheduler.assignRiders();
+    */
+    	
+    	SchedulerGUI gui = new SchedulerGUI();
+    	gui.setVisible(true);
+    	
+    	//Scheduler GUI needs to pass on 3 data paths for Excel_Input. Then make and call excel_input
+    	
+    	
     }
 }

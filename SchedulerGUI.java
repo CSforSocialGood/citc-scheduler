@@ -21,7 +21,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
 
 @SuppressWarnings("serial")
-public class MadisonHallScheduler extends JFrame implements ActionListener {
+public class SchedulerGUI extends JFrame implements ActionListener {
 	private int width = 1000;
 	private int height = 400;
 	JTextField[] fileFields; 
@@ -29,10 +29,10 @@ public class MadisonHallScheduler extends JFrame implements ActionListener {
 	JButton submitButton;
 	Color background;
 
-	public MadisonHallScheduler() {
-		super("MadisonHallScheduler");
+	public SchedulerGUI() {
+		super("SchedulerGUI");
 		setSize(width, height);
-		background = new Color(255, 250, 245); // 230, 230, 250 <- off white //255, 250, 245 <- slight lavender 
+		background = new Color(250, 250, 250); // 230, 230, 250 <- off white //255, 250, 245 <- slight lavender 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLayout(new BorderLayout());
 		
@@ -41,14 +41,14 @@ public class MadisonHallScheduler extends JFrame implements ActionListener {
 			panel1.setLayout(new GridLayout(3,1));
 			// Title
 			JLabel title = new JLabel("Cavs in The Classroom Scheduler");
-			title.setFont(new Font("Times New Roman", Font.BOLD, 20));
+			title.setFont(new Font("Century Gothic", Font.BOLD, 20));
 			title.setHorizontalAlignment(JLabel.CENTER);
 			panel1.add(title);
 			
 			// Directions for submitting files 
 			JLabel directions = new JLabel("<HTML><center>Please download all of your Excel/Google Drive Sheets as TSV files! "
 					+ "<br> For each sheet below, please select the path of the files on your computer. </center></HTML>");
-			directions.setFont(new Font("Times New Roman", Font.ITALIC, 15));
+			directions.setFont(new Font("Century Gothic", Font.ITALIC, 15));
 			directions.setHorizontalAlignment(JLabel.CENTER);
 			panel1.add(directions);
 			
@@ -85,7 +85,7 @@ public class MadisonHallScheduler extends JFrame implements ActionListener {
 				b[i].setOpaque(true);
 				b[i].setBorderPainted(false);
 				// Label formatting
-				messageFile[i].setFont(new Font("Times New Roman", Font.BOLD, 20));
+				messageFile[i].setFont(new Font("Century Gothic", Font.BOLD, 20));
 				messageFile[i].setHorizontalAlignment(JLabel.CENTER);
 				// Add each elements sequentially so that all of
 				panel2.add(messageFile[i]);
@@ -102,7 +102,7 @@ public class MadisonHallScheduler extends JFrame implements ActionListener {
 			panel3.setLayout(new GridLayout(1,2, 10,10));
 	
 			JLabel messageSubmit = new JLabel("<HTML><U>Hit Submit once ALL file paths have been entered to run the program:</U><HTML>"); //"<HTML><U>YOUR TEXT HERE</U></HTML>"
-			messageSubmit.setFont(new Font("Times New Roman", Font.PLAIN, 15));
+			messageSubmit.setFont(new Font("Century Gothic", Font.PLAIN, 15));
 			messageSubmit.setHorizontalAlignment(JLabel.CENTER);
 			panel3.add(messageSubmit);
 	
@@ -122,7 +122,7 @@ public class MadisonHallScheduler extends JFrame implements ActionListener {
 	private void setSubmitButtonEnabled(boolean enabled) {
 		this.submitButton.setEnabled(enabled);
 		if(enabled) {
-			submitButton.setBackground(new Color(38, 166, 91));  // Light pink: 244, 121, 131
+			submitButton.setBackground(new Color(66,165, 245));  // green: 38, 166, 91 Light pink: 244, 121, 131
 		} else {
 			submitButton.setBackground(new Color(189, 189, 189));  // Light pink: 244, 121, 131
 		}
@@ -189,7 +189,7 @@ public class MadisonHallScheduler extends JFrame implements ActionListener {
 	}
 	public static void main(String[] args) throws IOException
 	{
-		MadisonHallScheduler obj = new MadisonHallScheduler();
+		SchedulerGUI obj = new SchedulerGUI();
 		obj.setVisible(true);
 	}
 }

@@ -31,6 +31,8 @@ public class Excel_Input {
 	public static String thursday = "";
 	public static String friday = "";
 	
+	
+	//constructor
 	public Excel_Input () {
 		
 	}
@@ -269,9 +271,6 @@ public class Excel_Input {
 				}
 
 				makeDriverOrVolunteer();
-				/*
-				 * for (String item:dataArray) { System.out.print(item + "|"); }
-				 */
 				
 				dataRow = TSVFile.readLine();
 				
@@ -412,6 +411,18 @@ public class Excel_Input {
 			System.out.println(t);
 			if (showAvailability) t.showAvailability();
 		}
+	}
+
+	public static ArrayList<Teacher> getTeachers() {
+		return teachers;
+	}
+
+	public static ArrayList<Volunteer> getVolunteers() {
+		return volunteers;
+	}
+
+	public static ArrayList<Driver> getDrivers() {
+		return drivers;
 	}
 	
 }
