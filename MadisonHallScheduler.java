@@ -5,6 +5,8 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import java.io.IOException;
 import javax.swing.JButton;
@@ -20,14 +22,14 @@ import javax.swing.filechooser.FileSystemView;
 public class MadisonHallScheduler extends JFrame implements ActionListener {
 	private int width = 1000;
 	private int height = 400;
-	JTextField fileField1; 
-	JTextField fileField2;
-	JTextField fileField3;
+	JTextField[] fileFields; 
+	JButton[] b;
+	Color background;
 
 	public MadisonHallScheduler() {
 		super("MadisonHallScheduler");
 		setSize(width, height);
-		this.setBackground(Color.WHITE);
+		background = new Color(255, 250, 245); // 230, 230, 250 <- off white //255, 250, 245 <- slight lavender 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLayout(new BorderLayout());
 		JPanel panel1 = new JPanel();
@@ -37,76 +39,61 @@ public class MadisonHallScheduler extends JFrame implements ActionListener {
 			title.setFont(new Font("Times New Roman", Font.BOLD, 20));
 			title.setHorizontalAlignment(JLabel.CENTER);
 			panel1.add(title);
-			JLabel message = new JLabel("Please download all of your Excel/Google Drive Sheets as TSV files! "
-					+ "\n For each sheet below, please select the path of the files on your computer.");
+			JLabel message = new JLabel("<HTML><center>Please download all of your Excel/Google Drive Sheets as TSV files! "
+					+ "<br> For each sheet below, please select the path of the files on your computer. </center></HTML>");
 			message.setFont(new Font("Times New Roman", Font.ITALIC, 15));
 			message.setHorizontalAlignment(JLabel.CENTER);
 			panel1.add(message);
-			JLabel message1 = new JLabel("For each sheet below, please select the path of the files on your computer.");
-			message1.setFont(new Font("Times New Roman", Font.ITALIC, 15));
-			message1.setHorizontalAlignment(JTextField.CENTER);
-			panel1.add(message1);
-			panel1.setBackground(new Color(255,255,255));
+			panel1.setBackground(background);
 		add(panel1,BorderLayout.NORTH);
-		
+
 		JPanel panel2 = new JPanel();
 			panel2.setLayout(new GridLayout(3,5, 20, 20));
-			panel2.setBackground(Color.WHITE);
 			panel2.setMaximumSize(new Dimension(width*1/3, height));
-			JLabel messageFile1 = new JLabel("Teachers: ");
-			messageFile1.setFont(new Font("Times New Roman", Font.BOLD, 20));
-			messageFile1.setHorizontalAlignment(JLabel.CENTER);
-			
-			JButton b1 = new JButton("Select File 1");
-			b1.addActionListener(this);
-			
-			JLabel messageFile2 = new JLabel("Curry & New Volunteers: ");
-			messageFile2.setFont(new Font("Times New Roman", Font.BOLD, 20));
-			messageFile2.setHorizontalAlignment(JLabel.CENTER);
-			
-			JButton b2 = new JButton("Select File 2");
-			b2.addActionListener(this);
-			
-			JLabel messageFile3 = new JLabel("Returning Volunteers: ");
-			messageFile3.setFont(new Font("Times New Roman", Font.BOLD, 20));
-			messageFile3.setHorizontalAlignment(JLabel.CENTER);
-			
-			JButton b3 = new JButton("Select File 3");
-			b3.addActionListener(this);
-			
-			fileField1 = new JTextField("");
-			fileField1.setBorder(new LineBorder(Color.RED, 2));
-			fileField1.setEditable(false);
-			fileField2 = new JTextField("");
-			fileField2.setBorder(new LineBorder(Color.BLUE, 2));
-			fileField2.setEditable(false);
-			fileField3 = new JTextField("");
-			fileField3.setBorder(new LineBorder(Color.BLACK, 2));
-			fileField3.setEditable(false);
-			panel2.add(messageFile1);
-			panel2.add(fileField1);
-			panel2.add(b1);
-			panel2.add(messageFile2);
-			panel2.add(fileField2);
-			panel2.add(b2);
-			panel2.add(messageFile3);
-			panel2.add(fileField3);
-			panel2.add(b3);
+	
+			JLabel[] messageFile = new JLabel[3];
+			fileFields = new JTextField[3];
+			b = new JButton[3];
+	
+			messageFile[0] = new JLabel("Teachers: ");
+			messageFile[1] = new JLabel("Curry & New Volunteers: ");
+			messageFile[2] = new JLabel("Returning Volunteers: ");
+	
+			for(int i=0; i<3; i++) {
+				fileFields[i] = new JTextField("");
+				fileFields[i].setBorder(new LineBorder(Color.BLACK, 2));
+				fileFields[i].setEditable(false);
+				b[i] = new JButton("Select File " + (i+1));
+				b[i].addActionListener(this);
+				b[i].setBackground(new Color(66,165, 245));
+				b[i].setFont(new Font("Century Gothic", Font.PLAIN, 18));
+				b[i].setForeground(Color.WHITE);
+				messageFile[i].setFont(new Font("Times New Roman", Font.BOLD, 20));
+				messageFile[i].setHorizontalAlignment(JLabel.CENTER);
+				panel2.add(messageFile[i]);
+				panel2.add(fileFields[i]);
+				panel2.add(b[i]);
+			}
+			panel2.setBackground(background);
 		add(panel2,BorderLayout.CENTER);
-		
+
 		JPanel panel3 = new JPanel();
+			panel3.setBorder(new EmptyBorder(10, 10, 10, 10));
 			panel3.setMaximumSize(new Dimension(50, 50));
 			panel3.setLayout(new GridLayout(1,2, 10,10));
-			panel3.setBackground(Color.WHITE);
-			
-			JLabel messageSubmit = new JLabel("Hit Submit once ALL file paths have been entered to run the program:");
+	
+			JLabel messageSubmit = new JLabel("<HTML><U>Hit Submit once ALL file paths have been entered to run the program:</U><HTML>"); //"<HTML><U>YOUR TEXT HERE</U></HTML>"
 			messageSubmit.setFont(new Font("Times New Roman", Font.PLAIN, 15));
 			messageSubmit.setHorizontalAlignment(JLabel.CENTER);
 			panel3.add(messageSubmit);
-			
+	
 			JButton submit = new JButton("Submit"); 
 			submit.addActionListener(this);
+			submit.setBackground(new Color(38, 166, 91));  // Light pink: 244, 121, 131
+			submit.setFont(new Font("Century Gothic", Font.PLAIN, 18));
+			submit.setForeground(Color.WHITE);
 			panel3.add(submit);
+			panel3.setBackground(background);
 		add(panel3,BorderLayout.SOUTH);
 		this.pack();
 	}
@@ -115,59 +102,32 @@ public class MadisonHallScheduler extends JFrame implements ActionListener {
 		// TODO Auto-generated method stub
 		String action = e.getActionCommand(); 
 		if (action.equals("Select File 1")) { 
-			// create an object of JFileChooser class 
-			JFileChooser j = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory()); 
-
-			// invoke the showsSaveDialog function to show the save dialog 
-			int r = j.showSaveDialog(null); 
-
-			// if the user selects a file 
-			if (r == JFileChooser.APPROVE_OPTION) 
-
-			{ 
-				// set the label to the path of the selected file 
-				fileField1.setText(j.getSelectedFile().getAbsolutePath()); 
-			} 
-			// if the user cancelled the operation 
-			else
-				JOptionPane.showMessageDialog(null,"User cancelled file input");
+			setSelectedField(0);
 		}
 		else if (action.equals("Select File 2")) { 
-			// create an object of JFileChooser class 
-			JFileChooser j = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory()); 
-
-			// invoke the showsSaveDialog function to show the save dialog 
-			int r = j.showSaveDialog(null); 
-
-			// if the user selects a file 
-			if (r == JFileChooser.APPROVE_OPTION) 
-
-			{ 
-				// set the label to the path of the selected file 
-				fileField2.setText(j.getSelectedFile().getAbsolutePath()); 
-			} 
-			// if the user cancelled the operation 
-			else
-				JOptionPane.showMessageDialog(null,"User cancelled file input");
+			setSelectedField(1);
 		}
 		else if (action.equals("Select File 3")) { 
-			// create an object of JFileChooser class 
-			JFileChooser j = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory()); 
-
-			// invoke the showsSaveDialog function to show the save dialog 
-			int r = j.showSaveDialog(null); 
-
-			// if the user selects a file 
-			if (r == JFileChooser.APPROVE_OPTION) 
-
-			{ 
-				// set the label to the path of the selected file 
-				fileField1.setText(j.getSelectedFile().getAbsolutePath()); 
-			} 
-			// if the user cancelled the operation 
-			else
-				JOptionPane.showMessageDialog(null,"User cancelled file input");
+			setSelectedField(2);
 		}
+	}
+	public void setSelectedField(int i) {
+		// create an object of JFileChooser class 
+		JFileChooser j = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory()); 
+
+		// invoke the showsSaveDialog function to show the save dialog 
+		int r = j.showSaveDialog(null); 
+
+		// if the user selects a file 
+		if (r == JFileChooser.APPROVE_OPTION) 
+
+		{ 
+			// set the label to the path of the selected file 
+			fileFields[i].setText(j.getSelectedFile().getAbsolutePath()); 
+		} 
+		// if the user cancelled the operation 
+		else
+			JOptionPane.showMessageDialog(null,"User cancelled file input");
 	}
 	public static void main(String[] args) throws IOException
 	{
