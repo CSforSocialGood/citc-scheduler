@@ -52,6 +52,16 @@ public class Availability {
         return out;
     }
 
+    public ArrayList<TimeBlock> findOverlaps(TimeBlockAndDay when) {
+        ArrayList<TimeBlock> out = new ArrayList<>();
+        ArrayList<TimeBlock> availabilityForDay = this.getAvailabilityForDay(when.getDay());
+        for(TimeBlock block : availabilityForDay) {
+            TimeBlock overlap = block.overlapWith(when.getTimeBlock());
+            if(overlap != null) out.add(overlap);
+        }
+        return out;
+    }
+
     public ArrayList<TimeBlock> getAvailabilityForDay(DayOfWeek day) {
         if(!this.weeklyAvailability.containsKey(day)) this.weeklyAvailability.put(day, new ArrayList<TimeBlock>());
         return this.weeklyAvailability.get(day);
@@ -104,7 +114,7 @@ class TimeBlock {
 
     @Override
     public boolean equals(Object obj) {
-        return (obj instanceof TimeBlock) && ((TimeBlock)obj).getStartTime() == this.getStartTime() && ((TimeBlock)obj).getEndTime() == this.getEndTime();
+        return (obj instanceof TimeBlock) && ((TimeBlock)obj).getStartTime().equals(this.getStartTime()) && ((TimeBlock)obj).getEndTime().equals(this.getEndTime());
     }
 
     public TimeBlock overlapWith(TimeBlock other) {
