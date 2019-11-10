@@ -4,132 +4,414 @@ import java.io.FileNotFoundException;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.time.Duration;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
 public class Excel_Input {
-	public ArrayList<Teacher> teachers = new ArrayList<Teacher>();
-	public ArrayList<Volunteer> volunteers = new ArrayList<Volunteer>();
-	public ArrayList<Driver> drivers = new ArrayList<Driver>();
 	
-	public static void makeVolunteers() {
+	public static ArrayList<Teacher> teachers = new ArrayList<Teacher>();
+	public static ArrayList<Volunteer> volunteers = new ArrayList<Volunteer>();
+	public static ArrayList<Driver> drivers = new ArrayList<Driver>();
+
+	public static String firstName = "";
+	public static String lastName = "";
+	public static String email = "";
+	public static String phone = "";
+	public static String preferredSchool = "";
+	public static String drivingInfo = "";
+	public static boolean isCurry = false;
+	public static boolean isSpanish = false;
+
+	public static String monday = "";
+	public static String tuesday = "";
+	public static String wednesday = "";
+	public static String thursday = "";
+	public static String friday = "";
+	
+	public Excel_Input () {
+		
+	}
+		
+	// add availability in 30 min blocks for one day of the week
+	public static void addAvailability(Person v, String timesPerDay, DayOfWeek day) {
+		String[] timeBlock = timesPerDay.split(",");
+		for (String time : timeBlock) {
+			String[] hoursThenMin = time.split(":");
+			try {
+			int hour = Integer.parseInt(hoursThenMin[0].strip());
+			int min = Integer.parseInt(hoursThenMin[1].strip());
+			v.getAvailability().addTimeBlock(day, new TimeBlock(LocalTime.of(hour, min), Duration.ofMinutes(30)));
+			} catch (NumberFormatException e){
+				//System.out.println("No Availability on " + day);
+			}
+		}
+	}
+
+	// based on driverInfo, will make a driver with assumed max seats or make a
+	// volunteer if driving self or no car
+	public static void makeDriverOrVolunteer() {
+		if (drivingInfo.equals("5-7")) {
+			int seatsInCar = 7;
+			Driver d = new Driver(firstName, lastName, email, phone, preferredSchool, isCurry, isSpanish, seatsInCar);
+			addAvailability(d, monday, DayOfWeek.Monday);
+			addAvailability(d, tuesday, DayOfWeek.Tuesday);
+			addAvailability(d, wednesday, DayOfWeek.Wednesday);
+			addAvailability(d, thursday, DayOfWeek.Thursday);
+			addAvailability(d, friday, DayOfWeek.Friday);
+			drivers.add(d);
+		}
+
+		else if (drivingInfo.equals("1-4")) {
+			int seatsInCar = 4;
+			Driver d = new Driver(firstName, lastName, email, phone, preferredSchool, isCurry, isSpanish, seatsInCar);
+			addAvailability(d, monday, DayOfWeek.Monday);
+			addAvailability(d, tuesday, DayOfWeek.Tuesday);
+			addAvailability(d, wednesday, DayOfWeek.Wednesday);
+			addAvailability(d, thursday, DayOfWeek.Thursday);
+			addAvailability(d, friday, DayOfWeek.Friday);
+			drivers.add(d);
+			
+		} else {
+			Volunteer v = new Volunteer(firstName, lastName, email, phone, preferredSchool, isCurry, isSpanish);
+			addAvailability(v, monday, DayOfWeek.Monday);
+			addAvailability(v, tuesday, DayOfWeek.Tuesday);
+			addAvailability(v, wednesday, DayOfWeek.Wednesday);
+			addAvailability(v, thursday, DayOfWeek.Thursday);
+			addAvailability(v, friday, DayOfWeek.Friday);
+			volunteers.add(v);
+		}
+	}
+
+	public static void makeReturnees(String returneeFilePath) {
 		try {
-			StringTokenizer st ;
-			BufferedReader TSVFile = new BufferedReader(new FileReader("newVolunteer.tsv"));
-		    String dataRow;
-		    
-		    dataRow = TSVFile.readLine();
-		    dataRow = TSVFile.readLine();
-		    
-		    while (dataRow != null){
-	            st = new StringTokenizer(dataRow,"\t");
-	            //System.out.println(st.countTokens());
-	            st.nextToken();
-	            
-	            ArrayList<String>dataArray = new ArrayList<String>() ;
-	            
-	            int column = 1;
-	            //boolean print = true;
-	         /* String firstName = "";
-            	String lastName = "";
-            	String email = "";
-            	String phone = "";
-            	String school = "";
-            	boolean isCurry = false;
-            	boolean isSpanish = false;
-            	*/
-	            
-	            while(st.hasMoreElements()){
-	                       	  
-	            	String firstName = "";
-	            	String lastName = "";
-	            	String email = "";
-	            	String phone = "";
-	            	String school = "";
-	            	boolean isCurry = false;
-	            	boolean isSpanish = false;
-	            	
-	               
-	                String dataToken = st.nextElement().toString();
-	                dataArray.add(dataToken + column);
-	                
-	                switch(column) {
-	                case 1:
-	                	firstName = dataToken;
-	                	column++;
-	                	continue;
-	                case 2:
-	                	lastName = dataToken;
-	                	column++;
-	                	continue;
-	                case 3:
-	                	email = dataToken;
-	                	column++;
-	                	continue;
-	                case 4: 
-	                	phone = dataToken;
-	                	column++;
-	                	continue;
-	                case 5:
-	                	isCurry = dataToken.equals("No") ? false : true;
-	                	column++;
-	                	continue;
-	                case 6:
-	                	/////monday
-	                	column++;
-	                	continue;
-	                case 7:
-	                	////trues
-	                	column++;
-	                	continue;
-	                case 8:
-	                	////weds
-	                	column++;
-	                	continue;
-	                case 9: 
-	                	////
-	                	column++;
-	                	continue;
-	                case 10:
-	                	////
-	                	column++;
-	                	continue;
-	                case 11: 
-	                	///has car?
-	                	column++;
-	                	continue;
-	                case 12:
-	                	//can be Driver
-	                	column++;
-	                	continue;
-	                case 13: 
-	                	isSpanish = dataToken.equals("No") ? false : true;
-	                	continue;
-	                	
-	                }
-	            }   
-	           
-	            for (String item:dataArray) { 
-	                System.out.print(item + "|"); 
-	            }
-	            System.out.println(); // Print the data line.
-	            dataRow = TSVFile.readLine(); // Read next line of data.
-	        }
-		    
-	        // Close the file once all data has been read.
-	        TSVFile.close();
-		    		
-		}catch (FileNotFoundException e) {
-			System.out.println("File not found");
-		} 
-		catch (IOException e) {
+			StringTokenizer st;
+			BufferedReader TSVFile = new BufferedReader(new FileReader(returneeFilePath));
+			String dataRow;
+
+			dataRow = TSVFile.readLine();
+			dataRow = TSVFile.readLine();
+			// Skips row of headers
+
+			while (dataRow != null) {
+				ArrayList<String> dataArray = new ArrayList<String>();
+				//System.out.println(dataRow);
+				firstName = "";
+				lastName = "";
+				email = "";
+				phone = "";
+				preferredSchool = "";
+				drivingInfo = "";
+				isCurry = false;
+				isSpanish = false;
+
+				monday = "";
+				tuesday = "";
+				wednesday = "";
+				thursday = "";
+				friday = "";
+
+				st = new StringTokenizer(dataRow, "\t");
+				st.nextToken();
+				// skips column 0 of timestamp
+
+				while (st.hasMoreElements()) {
+					for (int column = 1; column <= 13; column++) {
+						String dataToken = st.nextElement().toString();
+						dataArray.add(dataToken);
+				
+						switch (column) {
+						case 1:
+							firstName = dataToken;
+							break;
+						case 2:
+							lastName = dataToken;
+							break;
+						case 3:
+							email = dataToken;
+							break;
+						case 4:
+							phone = dataToken;
+							break;
+						case 5:
+							isCurry = dataToken.equals("Yes") ? true : false;
+							break;
+						case 6:
+							monday = dataToken;
+							break;
+						case 7:
+							tuesday = dataToken;
+							break;
+						case 8:
+							wednesday = dataToken;
+							break;
+						case 9:
+							thursday = dataToken;
+							break;
+						case 10:
+							friday = dataToken;
+							break;
+						case 11:
+							preferredSchool = dataToken;
+							break;
+						case 12:
+							drivingInfo = dataToken;
+							break;
+						case 13:
+							isSpanish = dataToken.equals("Yes") ? true : false;
+							break;
+						default:
+							System.out.println("Error");
+						}
+					}
+				}
+
+				makeDriverOrVolunteer();
+				
+				dataRow = TSVFile.readLine();
+				
+			} // Stop reading file
+
+			TSVFile.close();
+
+		} catch (FileNotFoundException e) {
+			System.out.println("Returnee File not found. Check if file is named returnee.tsv");
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	//availability in 30 minute blocks
-	public static void main(String[] args) {
-		makeVolunteers();
-}
+	
+	
+	public static void makeNewParticipants(String newVolunteerFilePath) {
+		try {
+			StringTokenizer st;
+			BufferedReader TSVFile = new BufferedReader(new FileReader(newVolunteerFilePath));
+			String dataRow;
+
+			dataRow = TSVFile.readLine();
+			dataRow = TSVFile.readLine();
+			// Skips row of headers
+
+			while (dataRow != null) {
+				ArrayList<String> dataArray = new ArrayList<String>();
+				//System.out.println(dataRow);
+				firstName = "";
+				lastName = "";
+				email = "";
+				phone = "";
+				preferredSchool = "";
+				drivingInfo = "";
+				isCurry = false;
+				isSpanish = false;
+
+				monday = "";
+				tuesday = "";
+				wednesday = "";
+				thursday = "";
+				friday = "";
+
+				st = new StringTokenizer(dataRow, "\t");
+				st.nextToken();
+				// skips column 0 of timestamp
+
+				while (st.hasMoreElements()) {
+					for (int column = 1; column <= 13; column++) {
+						String dataToken = st.nextElement().toString();
+						dataArray.add(dataToken);
+				
+						switch (column) {
+						case 1:
+							firstName = dataToken;
+							break;
+						case 2:
+							lastName = dataToken;
+							break;
+						case 3:
+							email = dataToken;
+							break;
+						case 4:
+							phone = dataToken;
+							break;
+						case 5:
+							isCurry = dataToken.equals("Yes") ? true : false;
+							break;
+						case 6:
+							monday = dataToken;
+							break;
+						case 7:
+							tuesday = dataToken;
+							break;
+						case 8:
+							wednesday = dataToken;
+							break;
+						case 9:
+							thursday = dataToken;
+							break;
+						case 10:
+							friday = dataToken;
+							break;
+						case 11:
+							preferredSchool = dataToken;
+							break;
+						case 12:
+							drivingInfo = dataToken;
+							break;
+						case 13:
+							isSpanish = dataToken.equals("Yes") ? true : false;
+							break;
+						default:
+							System.out.println("Error");
+						}
+					}
+				}
+
+				makeDriverOrVolunteer();
+				/*
+				 * for (String item:dataArray) { System.out.print(item + "|"); }
+				 */
+				
+				dataRow = TSVFile.readLine();
+				
+			} // Stop reading file
+
+			TSVFile.close();
+
+		} catch (FileNotFoundException e) {
+			System.out.println("New Volunteer File not found. Check if file is named newVolunteer.tsv");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
+	public static void makeTeachers(String teacherFilePath) {
+		try {
+			StringTokenizer st;
+			BufferedReader TSVFile = new BufferedReader(new FileReader(teacherFilePath));
+			String dataRow;
+
+			dataRow = TSVFile.readLine();
+			dataRow = TSVFile.readLine();
+			// Skips row of headers
+
+			while (dataRow != null) {
+				ArrayList<String> dataArray = new ArrayList<String>();
+				//System.out.println(dataRow);
+				
+				firstName = "";
+				lastName = "";
+				email = "";
+				phone = "";
+				preferredSchool = "";
+				drivingInfo = "";
+				isCurry = false;
+				isSpanish = false;
+
+				monday = "";
+				tuesday = "";
+				wednesday = "";
+				thursday = "";
+				friday = "";
+
+				st = new StringTokenizer(dataRow, "\t");
+				st.nextToken();
+				//System.out.println(st.countTokens());
+				// skips column 0 of timestamp
+
+			
+					for (int column = 1; column < 10; column++) {
+						//System.out.println("c "+ column);
+						if (st.hasMoreElements()) {
+							
+						String dataToken = st.nextElement().toString();
+						dataArray.add(dataToken);
+				
+						switch (column) {
+						case 1:
+							String [] fullName = dataToken.split(" ");
+							firstName = fullName[0];
+							if (fullName.length >= 2) lastName = fullName[1];
+							break;
+						case 2:
+							preferredSchool = dataToken;
+							break;
+						case 3:
+							email = dataToken;
+							break;
+						case 4:
+							phone = dataToken;
+							break;
+						case 5:
+							monday = dataToken;
+							break;
+						case 6:
+							tuesday = dataToken;
+							break;
+						case 7:
+							wednesday = dataToken;
+							break;
+						case 8:
+							thursday = dataToken;
+							break;
+						case 9:
+							friday = dataToken;
+							break;
+							
+						default:
+							System.out.println("Error");
+						}
+					}
+					
+					}
+					
+					Teacher t = new Teacher (firstName, lastName, email, phone, preferredSchool);
+					
+					addAvailability(t, monday, DayOfWeek.Monday);
+					addAvailability(t, tuesday, DayOfWeek.Tuesday);
+					addAvailability(t, wednesday, DayOfWeek.Wednesday);
+					addAvailability(t, thursday, DayOfWeek.Thursday);
+					addAvailability(t, friday, DayOfWeek.Friday);
+					
+					teachers.add(t);
+					
+					dataRow = TSVFile.readLine();
+				
+			} 
+
+			TSVFile.close();
+
+		} catch (FileNotFoundException e) {
+			System.out.println("Teacher File not found. Check if file is named teacher.tsv");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void showDrivers(boolean showAvailability) {
+		System.out.println("Drivers: ");
+		for (Driver d : drivers) {
+			System.out.println(d);
+			if (showAvailability) d.showAvailability();
+		}
+	}
+	
+	public static void showVolunteers (boolean showAvailability) {
+		System.out.println("Volunteers: ");
+		for (Volunteer v : volunteers) {
+			System.out.println(v);
+			if (showAvailability) v.showAvailability();
+		}
+	}
+	
+	public static void showTeachers (boolean showAvailability) {
+		System.out.println("Teachers: ");
+		for (Teacher t : teachers) {
+			System.out.println(t);
+			if (showAvailability) t.showAvailability();
+		}
+	}
+	
 }

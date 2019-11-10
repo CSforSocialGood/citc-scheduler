@@ -67,4 +67,10 @@ public class Volunteer extends Person implements Comparable {
 		}
 		return 1;
 	}
+	
+	
+	@Override
+	public String toString() {
+		return super.toString() + " Preferred-School: " + preferredSchool + " Curry: " + isCurry +" Spanish-Speaking: " + isSpanishSpeaking;
+	}
 }

@@ -18,5 +18,11 @@ public class Driver extends Volunteer {
 	public ArrayList<Volunteer> getRiders() {
 	    return this.riders;
 	}
+	
+	@Override
+	public String toString() {
+		return "Driver: " + super.toString() + " Seats: " + seatsInCar;
+	}
+	
 
 }

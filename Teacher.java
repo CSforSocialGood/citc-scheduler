@@ -7,7 +7,7 @@ public class Teacher extends Person {
 	 */
 
 	private ArrayList<Volunteer> assignedVolunteers;
-	private Availability availability;
+	//private Availability availability;
 
 	public Teacher(String firstName, String lastName, String email, String phoneNo, String school) {
 		super(firstName, lastName, email, phoneNo);
@@ -32,5 +32,10 @@ public class Teacher extends Person {
 	public void assignVolunteer(Volunteer v) {
 		this.assignedVolunteers.add(v);
 		v.setTeacher(this);
+	}
+	
+	@Override
+	public String toString() {
+		return "Teacher: " + super.toString() + " School: " + school;
 	}
 }

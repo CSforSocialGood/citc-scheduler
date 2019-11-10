@@ -138,6 +138,7 @@ class TimeBlock {
         return this.duration;
     }
 
+    @Override
     public String toString() {
         return this.getStartTime().format(DateTimeFormatter.ofPattern("hh:mma")) + "-" + this.getEndTime().format(DateTimeFormatter.ofPattern("hh:mma"));
     }
