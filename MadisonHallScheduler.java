@@ -68,6 +68,8 @@ public class MadisonHallScheduler extends JFrame implements ActionListener {
 				b[i].setBackground(new Color(66,165, 245));
 				b[i].setFont(new Font("Century Gothic", Font.PLAIN, 18));
 				b[i].setForeground(Color.WHITE);
+				b[i].setOpaque(true);
+				b[i].setBorderPainted(false);
 				messageFile[i].setFont(new Font("Times New Roman", Font.BOLD, 20));
 				messageFile[i].setHorizontalAlignment(JLabel.CENTER);
 				panel2.add(messageFile[i]);
@@ -92,6 +94,8 @@ public class MadisonHallScheduler extends JFrame implements ActionListener {
 			submit.setBackground(new Color(38, 166, 91));  // Light pink: 244, 121, 131
 			submit.setFont(new Font("Century Gothic", Font.PLAIN, 18));
 			submit.setForeground(Color.WHITE);
+			submit.setOpaque(true);
+			submit.setBorderPainted(false);
 			panel3.add(submit);
 			panel3.setBackground(background);
 		add(panel3,BorderLayout.SOUTH);
@@ -132,15 +136,25 @@ public class MadisonHallScheduler extends JFrame implements ActionListener {
 		}
 	}
 	public void calledSubmit() {
+		boolean check = true;
 		// Check if inputs exist and are valid
 		for(int i=0; i<3; i++) {
 			if(fileFields[i].getText().equals("")) {
 				JOptionPane.showMessageDialog(null,"Not all file paths were entered!");
+				check = false;
 				break;
 			}
 			if(fileFields[i].getText().contains(".tsv")==false) {
 				JOptionPane.showMessageDialog(null,"Not all files are tsvs!");
+				check = false;
 				break;
+			}
+		}
+		if(check) {
+			//execute Submit
+			String[] fileNames = new String[3];
+			for(int i=0; i<3; i++) {
+				fileNames[i] = fileFields[i].getText();
 			}
 		}
 	}
