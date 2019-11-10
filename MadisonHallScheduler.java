@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import java.io.IOException;
+import java.util.Arrays;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -25,6 +26,7 @@ public class MadisonHallScheduler extends JFrame implements ActionListener {
 	private int height = 400;
 	JTextField[] fileFields; 
 	JButton[] b;
+	JButton submitButton;
 	Color background;
 
 	public MadisonHallScheduler() {
@@ -104,23 +106,31 @@ public class MadisonHallScheduler extends JFrame implements ActionListener {
 			messageSubmit.setHorizontalAlignment(JLabel.CENTER);
 			panel3.add(messageSubmit);
 	
-			JButton submit = new JButton("SUBMIT"); 
-			submit.addActionListener(this);
-			submit.setBackground(new Color(38, 166, 91));  // Light pink: 244, 121, 131
-			submit.setFont(new Font("Century Gothic", Font.PLAIN, 18));
-			submit.setForeground(Color.WHITE);
-			submit.setOpaque(true);
-			submit.setBorderPainted(false);
-			panel3.add(submit);
+			submitButton = new JButton("SUBMIT");
+			setSubmitButtonEnabled(false);
+			submitButton.addActionListener(this);
+			submitButton.setFont(new Font("Century Gothic", Font.PLAIN, 18));
+			submitButton.setForeground(Color.WHITE);
+			submitButton.setOpaque(true);
+			submitButton.setBorderPainted(false);
+			panel3.add(submitButton);
 			panel3.setBackground(background);
 		add(panel3,BorderLayout.SOUTH);
 		// Pack the elements together
 		this.pack();
 	}
+	private void setSubmitButtonEnabled(boolean enabled) {
+		this.submitButton.setEnabled(enabled);
+		if(enabled) {
+			submitButton.setBackground(new Color(38, 166, 91));  // Light pink: 244, 121, 131
+		} else {
+			submitButton.setBackground(new Color(189, 189, 189));  // Light pink: 244, 121, 131
+		}
+	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		String action = e.getActionCommand(); 
-		if (action.equals("Select File 1")) { 
+		String action = e.getActionCommand();
+		if (action.equals("Select File 1")) {
 			setSelectedField(0);
 		}
 		else if (action.equals("Select File 2")) { 
@@ -129,7 +139,7 @@ public class MadisonHallScheduler extends JFrame implements ActionListener {
 		else if (action.equals("Select File 3")) { 
 			setSelectedField(2);
 		}
-		else if (action.equals("SUBMIT")) { 
+		else if (action.equals("SUBMIT")) {
 			calledSubmit();
 		}
 	}
@@ -143,12 +153,13 @@ public class MadisonHallScheduler extends JFrame implements ActionListener {
 		// if the user selects a file 
 		if (r == JFileChooser.APPROVE_OPTION) { 
 			// set the label to the path of the selected file 
-			fileFields[i].setText(j.getSelectedFile().getAbsolutePath()); 
-		} 
+			fileFields[i].setText(j.getSelectedFile().getAbsolutePath());
+		}
 		// if the user cancelled the operation 
 		else {
 			JOptionPane.showMessageDialog(null,"User cancelled file input");
 		}
+		setSubmitButtonEnabled(!Arrays.stream(fileFields).anyMatch(x -> x.getText().equals("")));
 	}
 	public void calledSubmit() {
 		boolean check = true;
