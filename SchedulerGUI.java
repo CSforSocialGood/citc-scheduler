@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -185,8 +186,18 @@ public class SchedulerGUI extends JFrame implements ActionListener {
 			for(int i=0; i<3; i++) {
 				fileNames[i] = fileFields[i].getText();
 			}
+			processInput(fileNames);
 		}
 	}
+
+	public void processInput(String[] filenames) {
+	    // todo: make sure we are resilient to empty columns
+	    Excel_Input.makeTeachers(filenames[0]);
+		Excel_Input.makeNewParticipants(filenames[1]);
+		Excel_Input.makeReturnees(filenames[2]);
+        ArrayList<Teacher> teach = Excel_Input.getTeachers();
+	}
+
 	public static void main(String[] args) throws IOException
 	{
 		SchedulerGUI obj = new SchedulerGUI();
