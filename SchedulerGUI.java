@@ -67,9 +67,12 @@ public class SchedulerGUI extends JFrame implements ActionListener {
 			b = new JButton[3];
 	
 			// Set the text of each label
-			messageFile[0] = new JLabel("Teachers: ");
-			messageFile[1] = new JLabel("Curry & New Volunteers: ");
-			messageFile[2] = new JLabel("Returning Volunteers: ");
+			messageFile[0] = new JLabel("<HTML> <b> Teachers: </b> <br> <h4> "
+					+ "Note: File must contain the word \"teacher\" at least! </h4> </HTML> ");
+			messageFile[1] = new JLabel("<HTML> <b> Curry  & New Volunteers: </b> <br>"
+					+ "<h5> Note: File must contain the words \"Curry\" or \"new\" at least! </h5> </HTML> ");
+			messageFile[2] = new JLabel("<HTML> <b> Returning volunteers: </b> <br> <h4> "
+					+ "Note: File must contain the word \"returning\" at least! </h4> </HTML> ");
 	
 			// Initialize each element and format it equally
 			for(int i=0; i<3; i++) {
@@ -86,7 +89,7 @@ public class SchedulerGUI extends JFrame implements ActionListener {
 				b[i].setOpaque(true);
 				b[i].setBorderPainted(false);
 				// Label formatting
-				messageFile[i].setFont(new Font("Century Gothic", Font.BOLD, 20));
+				messageFile[i].setFont(new Font("Century Gothic", Font.PLAIN, 20));
 				messageFile[i].setHorizontalAlignment(JLabel.CENTER);
 				// Add each elements sequentially so that all of
 				panel2.add(messageFile[i]);
@@ -185,15 +188,15 @@ public class SchedulerGUI extends JFrame implements ActionListener {
 			String[] fileNames = new String[3];
 			for(int i=0; i<3; i++) {
 				fileNames[i] = fileFields[i].getText();
-				if(fileNames[0].toLowerCase().contains("teacher") == false ) {
-					JOptionPane.showMessageDialog(null,"The first file isn't a teacher file!");
-				}
-				else if(fileNames[0].toLowerCase().contains("curry") == false && fileNames[0].toLowerCase().contains("new") == false  ) {
-					JOptionPane.showMessageDialog(null,"The first file isn't a Curry and New Volunteers file!");
-				}
-				else if(fileNames[0].toLowerCase().contains("return") == false ) {
-					JOptionPane.showMessageDialog(null,"The first file isn't a returning volunteers file!");
-				}
+			}
+			if(fileNames[0].toLowerCase().contains("teacher") == false ) {
+				JOptionPane.showMessageDialog(null,"The first file isn't a teacher file!");
+			}
+			else if(fileNames[1].toLowerCase().contains("curry") == false && fileNames[0].toLowerCase().contains("new") == false  ) {
+				JOptionPane.showMessageDialog(null,"The first file isn't a Curry and New Volunteers file!");
+			}
+			else if(fileNames[2].toLowerCase().contains("return") == false ) {
+				JOptionPane.showMessageDialog(null,"The first file isn't a returning volunteers file!");
 			}
 			processInput(fileNames);
 		}
