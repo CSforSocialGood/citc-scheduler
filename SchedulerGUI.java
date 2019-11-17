@@ -185,6 +185,15 @@ public class SchedulerGUI extends JFrame implements ActionListener {
 			String[] fileNames = new String[3];
 			for(int i=0; i<3; i++) {
 				fileNames[i] = fileFields[i].getText();
+				if(fileNames[0].toLowerCase().contains("teacher") == false ) {
+					JOptionPane.showMessageDialog(null,"The first file isn't a teacher file!");
+				}
+				else if(fileNames[0].toLowerCase().contains("curry") == false && fileNames[0].toLowerCase().contains("new") == false  ) {
+					JOptionPane.showMessageDialog(null,"The first file isn't a Curry and New Volunteers file!");
+				}
+				else if(fileNames[0].toLowerCase().contains("return") == false ) {
+					JOptionPane.showMessageDialog(null,"The first file isn't a returning volunteers file!");
+				}
 			}
 			processInput(fileNames);
 		}
