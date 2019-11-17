@@ -115,16 +115,15 @@ public class Excel_Input {
 				thursday = "";
 				friday = "";
 
-				st = new StringTokenizer(dataRow, "\t");
-				st.nextToken();
+				String[] split = dataRow.split("\t");
+				//System.out.println(st.countTokens());
 				// skips column 0 of timestamp
-
-				
-					for (int column = 1; column <= 13; column++) {
-						if (st.hasMoreTokens()) {
-						String dataToken = st.nextElement().toString();
+				for (int column = 1; column < 10; column++) {
+					//System.out.println("c "+ column);
+					if (split.length > column) {
+						String dataToken = split[column];
 						dataArray.add(dataToken);
-				
+
 						switch (column) {
 						case 1:
 							firstName = dataToken;
@@ -217,14 +216,13 @@ public class Excel_Input {
 				thursday = "";
 				friday = "";
 
-				st = new StringTokenizer(dataRow, "\t");
-				st.nextToken();
+				String[] split = dataRow.split("\t");
+				//System.out.println(st.countTokens());
 				// skips column 0 of timestamp
-
-				
-					for (int column = 1; column <= 13; column++) {
-						if (st.hasMoreElements()) {
-						String dataToken = st.nextElement().toString();
+				for (int column = 1; column < 10; column++) {
+					//System.out.println("c "+ column);
+					if (split.length > column) {
+						String dataToken = split[column];
 						dataArray.add(dataToken);
 				
 						switch (column) {
@@ -318,16 +316,13 @@ public class Excel_Input {
 				thursday = "";
 				friday = "";
 
-				st = new StringTokenizer(dataRow, "\t");
-				st.nextToken();
+				String[] split = dataRow.split("\t");
 				//System.out.println(st.countTokens());
 				// skips column 0 of timestamp
-
-			
 					for (int column = 1; column < 10; column++) {
 						//System.out.println("c "+ column);
-						if (st.hasMoreElements()) {
-						String dataToken = st.nextElement().toString();
+						if (split.length > column) {
+						String dataToken = split[column];
 						dataArray.add(dataToken);
 				
 						switch (column) {
