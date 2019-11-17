@@ -32,26 +32,28 @@ public class Scheduler {
                 continue;
             }
             for(Volunteer rider : ridersRemaining) {
-                ArrayList<TimeBlock> overlaps = rider.getAvailability().findOverlaps(driver.getAssignment());
-                if(overlaps.size() != 0) {
-                    TimeBlock overlap = overlaps.get(0);
-                    // there is overlap
-                    // assign this rider to this driver
-                    ArrayList<Teacher> teachersAtTime = new ArrayList<>();
-                    for(Teacher t : this.teachers) {
-                        if(t.getSchool().equals(driver.getTeacher().getSchool()) && t.getAvailability().findOverlaps(driver.getAssignment()) != null) {
-                            // this teacher is an option for this rider
-                            teachersAtTime.add(t);
+            	if ( ( (!rider.getPreferredSchool().equals("")) && rider.getPreferredSchool().equals(driver.getTeacher().getSchool())) || rider.getPreferredSchool().equals("")) {
+            		ArrayList<TimeBlock> overlaps = rider.getAvailability().findOverlaps(driver.getAssignment());
+                    if(overlaps.size() != 0) {
+                        TimeBlock overlap = overlaps.get(0);
+                        // there is overlap
+                        // assign this rider to this driver
+                        ArrayList<Teacher> teachersAtTime = new ArrayList<>();
+                        for(Teacher t : this.teachers) {
+                            if(t.getSchool().equals(driver.getTeacher().getSchool()) && t.getAvailability().findOverlaps(driver.getAssignment()) != null) {
+                                // this teacher is an option for this rider
+                                teachersAtTime.add(t);
+                            }
                         }
-                    }
-                    teachersAtTime.sort(Comparator.comparing(Teacher::getNumVolunteers)); // sort by num volunteers
-                    if(teachersAtTime.size() != 0) {
-                        teachersAtTime.get(0).assignVolunteer(rider);
-                        rider.setAssignedTime(overlap, driver.getAssignment().getDay());
-                        ridersRemaining.remove(rider);
-                        driver.addRider(rider);
-                        lastAssigned = currentDriver;
-                        break;
+                        teachersAtTime.sort(Comparator.comparing(Teacher::getNumVolunteers)); // sort by num volunteers
+                        if(teachersAtTime.size() != 0) {
+                            teachersAtTime.get(0).assignVolunteer(rider);
+                            rider.setAssignedTime(overlap, driver.getAssignment().getDay());
+                            ridersRemaining.remove(rider);
+                            driver.addRider(rider);
+                            lastAssigned = currentDriver;
+                            break;
+                        }
                     }
                 }
             }
@@ -73,32 +75,34 @@ public class Scheduler {
                 boolean driverAssigned = false;
                 ArrayList<TimeBlockAndDay> overlaps;
                 if((overlaps = d.getAvailability().findOverlaps(teacher.getAvailability())).size() != 0) {
-                    for(TimeBlockAndDay overlap : overlaps) {
-                        // count the number of carseats going to the school at this time
-                        int seatsAtTime = 0;
-                        for(Driver assigned : driversAssigned) {
-                            if(assigned.getTeacher().getSchool().equals(teacher.getSchool()) && assigned.getAssignment().getDay() == overlap.getDay() && assigned.getAssignment().getTimeBlock().overlapWith(overlap.getTimeBlock()) != null) {
-                                // these drivers are assigned on the same day
-                                seatsAtTime += assigned.getSeats();
-                            }
-                        }
-                        // count the number of teachers at this school at this time
-                        int teachersAtTime = 0;
-                        for(Teacher otherTeacher : teachers) {
-                            if(otherTeacher.getSchool().equals(teacher.getSchool()) && otherTeacher.getAvailability().findOverlaps(overlap).size() != 0)
-                                teachersAtTime += 1;
-                        }
-                        // if there are more teachers than seats, it makes sense to assign another driver, as each teacher needs a volunter, who needs a seat in a car
-                        if(seatsAtTime < teachersAtTime) {
-                            // we can safely assign this driver to this time
-                            teacher.assignVolunteer(d);
-                            d.setAssignedTime(overlap.getTimeBlock(), overlap.getDay());
-                            driversRemaining.remove(d);
-                            driversAssigned.add(d);
-                            driverAssigned = true;
-                            break;
-                        }
-                    }
+                	if ( ( (!d.getPreferredSchool().equals("")) && d.getPreferredSchool().equals(teacher.getSchool())) || d.getPreferredSchool().equals("")) {
+	                    for(TimeBlockAndDay overlap : overlaps) {
+	                        // count the number of carseats going to the school at this time
+	                        int seatsAtTime = 0;
+	                        for(Driver assigned : driversAssigned) {
+	                            if(assigned.getTeacher().getSchool().equals(teacher.getSchool()) && assigned.getAssignment().getDay() == overlap.getDay() && assigned.getAssignment().getTimeBlock().overlapWith(overlap.getTimeBlock()) != null) {
+	                                // these drivers are assigned on the same day
+	                                seatsAtTime += assigned.getSeats();
+	                            }
+	                        }
+	                        // count the number of teachers at this school at this time
+	                        int teachersAtTime = 0;
+	                        for(Teacher otherTeacher : teachers) {
+	                            if(otherTeacher.getSchool().equals(teacher.getSchool()) && otherTeacher.getAvailability().findOverlaps(overlap).size() != 0)
+	                                teachersAtTime += 1;
+	                        }
+	                        // if there are more teachers than seats, it makes sense to assign another driver, as each teacher needs a volunter, who needs a seat in a car
+	                        if(seatsAtTime < teachersAtTime) {
+	                            // we can safely assign this driver to this time
+	                            teacher.assignVolunteer(d);
+	                            d.setAssignedTime(overlap.getTimeBlock(), overlap.getDay());
+	                            driversRemaining.remove(d);
+	                            driversAssigned.add(d);
+	                            driverAssigned = true;
+	                            break;
+	                        }
+	                    }
+                	}
                 }
                 if(driverAssigned) break;
             }
