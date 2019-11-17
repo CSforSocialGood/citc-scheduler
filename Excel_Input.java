@@ -119,8 +119,9 @@ public class Excel_Input {
 				st.nextToken();
 				// skips column 0 of timestamp
 
-				while (st.hasMoreElements()) {
+				
 					for (int column = 1; column <= 13; column++) {
+						if (st.hasMoreTokens()) {
 						String dataToken = st.nextElement().toString();
 						dataArray.add(dataToken);
 				
@@ -169,6 +170,7 @@ public class Excel_Input {
 						}
 					}
 				}
+				
 
 				makeDriverOrVolunteer();
 				
@@ -219,8 +221,9 @@ public class Excel_Input {
 				st.nextToken();
 				// skips column 0 of timestamp
 
-				while (st.hasMoreElements()) {
+				
 					for (int column = 1; column <= 13; column++) {
+						if (st.hasMoreElements()) {
 						String dataToken = st.nextElement().toString();
 						dataArray.add(dataToken);
 				
@@ -268,8 +271,8 @@ public class Excel_Input {
 							System.out.println("Error");
 						}
 					}
-				}
-
+				
+					}
 				makeDriverOrVolunteer();
 				
 				dataRow = TSVFile.readLine();
@@ -324,7 +327,6 @@ public class Excel_Input {
 					for (int column = 1; column < 10; column++) {
 						//System.out.println("c "+ column);
 						if (st.hasMoreElements()) {
-							
 						String dataToken = st.nextElement().toString();
 						dataArray.add(dataToken);
 				
@@ -424,5 +426,6 @@ public class Excel_Input {
 	public static ArrayList<Driver> getDrivers() {
 		return drivers;
 	}
+	
 	
 }
