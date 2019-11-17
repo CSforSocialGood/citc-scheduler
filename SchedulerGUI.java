@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+import java.beans.ExceptionListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -207,7 +208,13 @@ public class SchedulerGUI extends JFrame implements ActionListener {
 	    Excel_Input.makeTeachers(filenames[0]);
 		Excel_Input.makeNewParticipants(filenames[1]);
 		Excel_Input.makeReturnees(filenames[2]);
-        ArrayList<Teacher> teach = Excel_Input.getTeachers();
+        ArrayList<Teacher> teachers = Excel_Input.getTeachers();
+        ArrayList<Volunteer> volunteers = Excel_Input.getVolunteers();
+        ArrayList<Driver> drivers = Excel_Input.getDrivers();
+
+        Scheduler myScheduler = new Scheduler(drivers, volunteers, teachers);
+        myScheduler.assignDrivers();
+        myScheduler.assignRiders();
 	}
 
 	public static void main(String[] args) throws IOException

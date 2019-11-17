@@ -89,7 +89,6 @@ public class Excel_Input {
 
 	public static void makeReturnees(String returneeFilePath) {
 		try {
-			StringTokenizer st;
 			BufferedReader TSVFile = new BufferedReader(new FileReader(returneeFilePath));
 			String dataRow;
 
@@ -118,7 +117,7 @@ public class Excel_Input {
 				String[] split = dataRow.split("\t");
 				//System.out.println(st.countTokens());
 				// skips column 0 of timestamp
-				for (int column = 1; column < 10; column++) {
+				for (int column = 1; column < 13; column++) {
 					//System.out.println("c "+ column);
 					if (split.length > column) {
 						String dataToken = split[column];
@@ -219,7 +218,7 @@ public class Excel_Input {
 				String[] split = dataRow.split("\t");
 				//System.out.println(st.countTokens());
 				// skips column 0 of timestamp
-				for (int column = 1; column < 10; column++) {
+				for (int column = 1; column < 13; column++) {
 					//System.out.println("c "+ column);
 					if (split.length > column) {
 						String dataToken = split[column];

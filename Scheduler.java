@@ -22,8 +22,9 @@ public class Scheduler {
     public void assignRiders() {
         ArrayList<Volunteer> ridersRemaining = (ArrayList) volunteers.clone();
         int currentDriver = 0;
+        int lastAssigned = 0;
 
-        while (ridersRemaining.size() > 0) {
+        while (ridersRemaining.size() > 0 && (currentDriver - lastAssigned) <= drivers.size()) {
             Driver driver = this.drivers.get(currentDriver % this.drivers.size());
             boolean driverHasRoom = driver.getSeats() - driver.getRiders().size() > 1;
             if(!driverHasRoom) {
@@ -49,11 +50,12 @@ public class Scheduler {
                         rider.setAssignedTime(overlap, driver.getAssignment().getDay());
                         ridersRemaining.remove(rider);
                         driver.addRider(rider);
-                        currentDriver += 1;
+                        lastAssigned = currentDriver;
                         break;
                     }
                 }
             }
+            currentDriver += 1;
         }
     }
 
@@ -89,7 +91,6 @@ public class Scheduler {
                         // if there are more teachers than seats, it makes sense to assign another driver, as each teacher needs a volunter, who needs a seat in a car
                         if(seatsAtTime < teachersAtTime) {
                             // we can safely assign this driver to this time
-                            currentTeacher += 1;
                             teacher.assignVolunteer(d);
                             d.setAssignedTime(overlap.getTimeBlock(), overlap.getDay());
                             driversRemaining.remove(d);
@@ -101,6 +102,7 @@ public class Scheduler {
                 }
                 if(driverAssigned) break;
             }
+            currentTeacher += 1;
         }
     }
 }
