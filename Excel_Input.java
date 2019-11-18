@@ -21,9 +21,10 @@ public class Excel_Input {
 	public static String email = "";
 	public static String phone = "";
 	public static String preferredSchool = "";
-	public static String drivingInfo = "";
+	public static boolean isDriver = false;
 	public static boolean isCurry = false;
 	public static boolean isSpanish = false;
+	public static String seatInfo = "";
 
 	public static String monday = "";
 	public static String tuesday = "";
@@ -55,8 +56,10 @@ public class Excel_Input {
 	// based on driverInfo, will make a driver with assumed max seats or make a
 	// volunteer if driving self or no car
 	public static void makeDriverOrVolunteer() {
-		if (drivingInfo.equals("5-7")) {
-			int seatsInCar = 7;
+		if (isDriver) {
+			int seatsInCar = 0;
+			if (seatInfo.equals("5-7")) seatsInCar = 7;
+			else if (seatInfo.equals("1-4")) seatsInCar = 4;
 			Driver d = new Driver(firstName, lastName, email, phone, preferredSchool, isCurry, isSpanish, seatsInCar);
 			addAvailability(d, monday, DayOfWeek.Monday);
 			addAvailability(d, tuesday, DayOfWeek.Tuesday);
@@ -64,18 +67,6 @@ public class Excel_Input {
 			addAvailability(d, thursday, DayOfWeek.Thursday);
 			addAvailability(d, friday, DayOfWeek.Friday);
 			drivers.add(d);
-		}
-
-		else if (drivingInfo.equals("1-4")) {
-			int seatsInCar = 4;
-			Driver d = new Driver(firstName, lastName, email, phone, preferredSchool, isCurry, isSpanish, seatsInCar);
-			addAvailability(d, monday, DayOfWeek.Monday);
-			addAvailability(d, tuesday, DayOfWeek.Tuesday);
-			addAvailability(d, wednesday, DayOfWeek.Wednesday);
-			addAvailability(d, thursday, DayOfWeek.Thursday);
-			addAvailability(d, friday, DayOfWeek.Friday);
-			drivers.add(d);
-			
 		} else {
 			Volunteer v = new Volunteer(firstName, lastName, email, phone, preferredSchool, isCurry, isSpanish);
 			addAvailability(v, monday, DayOfWeek.Monday);
@@ -104,9 +95,10 @@ public class Excel_Input {
 				email = "";
 				phone = "";
 				preferredSchool = "";
-				drivingInfo = "";
+				isDriver = false;
 				isCurry = false;
 				isSpanish = false;
+				seatInfo = "";
 
 				monday = "";
 				tuesday = "";
@@ -117,7 +109,7 @@ public class Excel_Input {
 				String[] split = dataRow.split("\t");
 				//System.out.println(st.countTokens());
 				// skips column 0 of timestamp
-				for (int column = 1; column < 13; column++) {
+				for (int column = 1; column < 15; column++) {
 					//System.out.println("c "+ column);
 					if (split.length > column) {
 						String dataToken = split[column];
@@ -158,9 +150,12 @@ public class Excel_Input {
 							preferredSchool = dataToken;
 							break;
 						case 12:
-							drivingInfo = dataToken;
+							isDriver = dataToken.equals("Yes") ? true : false;
 							break;
 						case 13:
+							seatInfo = dataToken;
+							break;
+						case 14:
 							isSpanish = dataToken.equals("Yes") ? true : false;
 							break;
 						default:
@@ -189,7 +184,6 @@ public class Excel_Input {
 	
 	public static void makeNewParticipants(String newVolunteerFilePath) {
 		try {
-			StringTokenizer st;
 			BufferedReader TSVFile = new BufferedReader(new FileReader(newVolunteerFilePath));
 			String dataRow;
 
@@ -204,8 +198,7 @@ public class Excel_Input {
 				lastName = "";
 				email = "";
 				phone = "";
-				preferredSchool = "";
-				drivingInfo = "";
+				isDriver = false;
 				isCurry = false;
 				isSpanish = false;
 
@@ -256,10 +249,10 @@ public class Excel_Input {
 							friday = dataToken;
 							break;
 						case 11:
-							preferredSchool = dataToken;
+							isDriver = dataToken.equals("Yes") ? true : false;
 							break;
 						case 12:
-							drivingInfo = dataToken;
+							seatInfo = dataToken;
 							break;
 						case 13:
 							isSpanish = dataToken.equals("Yes") ? true : false;
@@ -288,7 +281,6 @@ public class Excel_Input {
 	
 	public static void makeTeachers(String teacherFilePath) {
 		try {
-			StringTokenizer st;
 			BufferedReader TSVFile = new BufferedReader(new FileReader(teacherFilePath));
 			String dataRow;
 
@@ -305,7 +297,7 @@ public class Excel_Input {
 				email = "";
 				phone = "";
 				preferredSchool = "";
-				drivingInfo = "";
+				isDriver = false;
 				isCurry = false;
 				isSpanish = false;
 
@@ -328,7 +320,7 @@ public class Excel_Input {
 						case 1:
 							String [] fullName = dataToken.split(" ");
 							firstName = fullName[0];
-							if (fullName.length >= 2) lastName = fullName[1];
+							if (fullName.length >= 2) lastName = fullName[1] ;
 							break;
 						case 2:
 							preferredSchool = dataToken;
@@ -421,5 +413,13 @@ public class Excel_Input {
 		return drivers;
 	}
 	
+	/*public static void main (String [] args) {
+		//makeReturnees("returnee.tsv");
+		//makeNewParticipants("newVolunteer.tsv");
+		//makeTeachers("teacher.tsv");
+		//showVolunteers(false);
+		//showDrivers(false);
+		//showTeachers(true);
+	}*/
 	
 }
