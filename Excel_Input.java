@@ -46,7 +46,7 @@ public class Excel_Input {
 			try {
 				int hour = Integer.parseInt(hoursThenMin[0].strip());
 				int min = Integer.parseInt(hoursThenMin[1].strip());
-				if (hour < 12) { //if hour < 12 (in military time), add 12 hours (to convert to PM)
+				if (hour > 12) { //if hour < 12 (in military time), add 12 hours (to convert to PM)
 					hour = hour+12;
 				}
 				v.getAvailability().addTimeBlock(day, new TimeBlock(LocalTime.of(hour, min), Duration.ofMinutes(30)));
@@ -64,7 +64,6 @@ public class Excel_Input {
 			int seatsInCar = 0;
 			if (seatInfo.equals("5-7")) seatsInCar = 7;
 			else if (seatInfo.equals("1-4")) seatsInCar = 4;
-			if(preferredSchool.equals("I'll take any school!")) preferredSchool = null;
 			Driver d = new Driver(firstName, lastName, email, phone, preferredSchool, isCurry, isSpanish, seatsInCar);
 			addAvailability(d, monday, DayOfWeek.Monday);
 			addAvailability(d, tuesday, DayOfWeek.Tuesday);

@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -204,21 +205,68 @@ public class SchedulerGUI extends JFrame implements ActionListener {
 		}
 	}
 
+	private <T> void shuffleArray(ArrayList<T> list) {
+	    for(int i = list.size() - 1; i >= 1; i--) {
+	    	int j = (int)Math.floor(Math.random() * (i + 1));
+	    	T temp = list.get(i);
+	    	list.set(i, list.get(j));
+	    	list.set(j, temp);
+		}
+	}
+
 	public void processInput(String[] filenames) {
 	    // todo: make sure we are resilient to empty columns
-	    Excel_Input.makeTeachers(filenames[0]);
-		Excel_Input.makeNewParticipants(filenames[1]);
-		Excel_Input.makeReturnees(filenames[2]);
+		ArrayList<Teacher> teachers;
+		ArrayList<Volunteer> volunteers;
+		ArrayList<Driver> drivers;
+		while(true) {
 
-        ArrayList<Teacher> teachers = Excel_Input.getTeachers();
-        ArrayList<Volunteer> volunteers = Excel_Input.getVolunteers();
-        ArrayList<Driver> drivers = Excel_Input.getDrivers();
+			Excel_Input.teachers = new ArrayList<>();
+			Excel_Input.drivers = new ArrayList<>();
+			Excel_Input.volunteers = new ArrayList<>();
 
-        Scheduler myScheduler = new Scheduler(drivers, volunteers, teachers);
-        myScheduler.assignDrivers();
-        myScheduler.assignRiders();
+			Excel_Input.makeTeachers(filenames[0]);
+			Excel_Input.makeNewParticipants(filenames[1]);
+			Excel_Input.makeReturnees(filenames[2]);
 
-        // just for a test
+			teachers = Excel_Input.getTeachers();
+			volunteers = Excel_Input.getVolunteers();
+			drivers = Excel_Input.getDrivers();
+
+			for(Volunteer v : volunteers) {
+				for(DayOfWeek d : DayOfWeek.values()) {
+					shuffleArray(v.getAvailability().getAvailabilityForDay(d));
+				}
+			}
+			for(Driver v : drivers) {
+				for(DayOfWeek d : DayOfWeek.values()) {
+					shuffleArray(v.getAvailability().getAvailabilityForDay(d));
+				}
+			}
+			for(Teacher t : teachers) {
+				for(DayOfWeek d : DayOfWeek.values()) {
+					shuffleArray(t.getAvailability().getAvailabilityForDay(d));
+				}
+			}
+
+			shuffleArray(drivers);
+			shuffleArray(volunteers);
+			shuffleArray(teachers);
+
+
+			Scheduler myScheduler = new Scheduler(drivers, volunteers, teachers);
+			myScheduler.assignDrivers();
+			myScheduler.assignRiders();
+
+			// count unassigned riders
+			int c = 0;
+			for(Volunteer r : volunteers) {
+			    if(r.getAssignment() == null) c++;
+			}
+			System.out.println(c + " unassigned riders");
+			if(c <= 8) break;
+		}
+		// just for a test
 		try {
 			// TODO: GUI for output file location
 			Exportable.createTsvFile(drivers, "./out.tsv");
