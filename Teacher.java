@@ -15,6 +15,7 @@ public class Teacher extends Person {
 		this.assignedVolunteers = new ArrayList<Volunteer>();
 		this.availability = new Availability();
 	}
+
 	public String getSchool() {
 		return school;
 	}

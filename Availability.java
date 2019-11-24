@@ -92,6 +92,11 @@ class TimeBlockAndDay {
     public DayOfWeek getDay() {
         return day;
     }
+
+    @Override
+    public String toString() {
+        return this.getDay().toString() + " "+ this.getTimeBlock().toString();
+    }
 }
 
 class TimeBlock {

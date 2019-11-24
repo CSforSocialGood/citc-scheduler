@@ -60,6 +60,7 @@ public class Excel_Input {
 			int seatsInCar = 0;
 			if (seatInfo.equals("5-7")) seatsInCar = 7;
 			else if (seatInfo.equals("1-4")) seatsInCar = 4;
+			if(preferredSchool.equals("I'll take any school!")) preferredSchool = null;
 			Driver d = new Driver(firstName, lastName, email, phone, preferredSchool, isCurry, isSpanish, seatsInCar);
 			addAvailability(d, monday, DayOfWeek.Monday);
 			addAvailability(d, tuesday, DayOfWeek.Tuesday);

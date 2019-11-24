@@ -12,6 +12,7 @@ import java.beans.ExceptionListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -208,6 +209,7 @@ public class SchedulerGUI extends JFrame implements ActionListener {
 	    Excel_Input.makeTeachers(filenames[0]);
 		Excel_Input.makeNewParticipants(filenames[1]);
 		Excel_Input.makeReturnees(filenames[2]);
+
         ArrayList<Teacher> teachers = Excel_Input.getTeachers();
         ArrayList<Volunteer> volunteers = Excel_Input.getVolunteers();
         ArrayList<Driver> drivers = Excel_Input.getDrivers();
@@ -215,6 +217,14 @@ public class SchedulerGUI extends JFrame implements ActionListener {
         Scheduler myScheduler = new Scheduler(drivers, volunteers, teachers);
         myScheduler.assignDrivers();
         myScheduler.assignRiders();
+
+        // just for a test
+		try {
+			// TODO: GUI for output file location
+			Exportable.createTsvFile(drivers, "./out.tsv");
+		} catch (java.io.IOException e) {
+			// ruh roh
+		}
 	}
 
 	public static void main(String[] args) throws IOException
