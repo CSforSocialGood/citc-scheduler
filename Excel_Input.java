@@ -44,9 +44,12 @@ public class Excel_Input {
 		for (String time : timeBlock) {
 			String[] hoursThenMin = time.split(":");
 			try {
-			int hour = Integer.parseInt(hoursThenMin[0].strip());
-			int min = Integer.parseInt(hoursThenMin[1].strip());
-			v.getAvailability().addTimeBlock(day, new TimeBlock(LocalTime.of(hour, min), Duration.ofMinutes(30)));
+				int hour = Integer.parseInt(hoursThenMin[0].strip());
+				int min = Integer.parseInt(hoursThenMin[1].strip());
+				if (hour < 12) { //if hour < 12 (in military time), add 12 hours (to convert to PM)
+					hour = hour+12;
+				}
+				v.getAvailability().addTimeBlock(day, new TimeBlock(LocalTime.of(hour, min), Duration.ofMinutes(30)));
 			} catch (NumberFormatException e){
 				//System.out.println("No Availability on " + day);
 			}
@@ -56,6 +59,7 @@ public class Excel_Input {
 	// based on driverInfo, will make a driver with assumed max seats or make a
 	// volunteer if driving self or no car
 	public static void makeDriverOrVolunteer() {
+		if (preferredSchool.equals("I'll take any school!")) preferredSchool = null;
 		if (isDriver) {
 			int seatsInCar = 0;
 			if (seatInfo.equals("5-7")) seatsInCar = 7;
