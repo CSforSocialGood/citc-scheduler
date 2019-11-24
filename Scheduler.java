@@ -26,13 +26,17 @@ public class Scheduler {
 
         while (ridersRemaining.size() > 0 && (currentDriver - lastAssigned) <= drivers.size()) {
             Driver driver = this.drivers.get(currentDriver % this.drivers.size());
+            if(driver.getTeacher() == null) {
+                currentDriver += 1;
+                continue;
+            }
             boolean driverHasRoom = driver.getSeats() - driver.getRiders().size() > 1;
             if(!driverHasRoom) {
                 currentDriver += 1;
                 continue;
             }
             for(Volunteer rider : ridersRemaining) {
-            	if ( ( (!rider.getPreferredSchool().equals("")) && rider.getPreferredSchool().equals(driver.getTeacher().getSchool())) || rider.getPreferredSchool().equals("")) {
+            	if ( ( (!rider.getPreferredSchool().equals(null)) && rider.getPreferredSchool().equals(driver.getTeacher().getSchool())) || rider.getPreferredSchool().equals(null)) {
             		ArrayList<TimeBlock> overlaps = rider.getAvailability().findOverlaps(driver.getAssignment());
                     if(overlaps.size() != 0) {
                         TimeBlock overlap = overlaps.get(0);
@@ -69,13 +73,14 @@ public class Scheduler {
         ArrayList<Driver> driversAssigned = new ArrayList<>();
 
         int currentTeacher = 0;
-        while(driversRemaining.size() > 0) {
+        int lastAssigned = 0;
+        while(driversRemaining.size() > 0 && (currentTeacher - lastAssigned) <= drivers.size()) {
             Teacher teacher = teachers.get(currentTeacher % teachers.size());
             for(Driver d : driversRemaining) {
                 boolean driverAssigned = false;
                 ArrayList<TimeBlockAndDay> overlaps;
                 if((overlaps = d.getAvailability().findOverlaps(teacher.getAvailability())).size() != 0) {
-                	if ( ( (!d.getPreferredSchool().equals("")) && d.getPreferredSchool().equals(teacher.getSchool())) || d.getPreferredSchool().equals("")) {
+                	if ( ( (d.getPreferredSchool() != null) && d.getPreferredSchool().equals(teacher.getSchool())) || d.getPreferredSchool() == null) {
 	                    for(TimeBlockAndDay overlap : overlaps) {
 	                        // count the number of carseats going to the school at this time
 	                        int seatsAtTime = 0;
@@ -99,6 +104,7 @@ public class Scheduler {
 	                            driversRemaining.remove(d);
 	                            driversAssigned.add(d);
 	                            driverAssigned = true;
+	                            lastAssigned = currentTeacher;
 	                            break;
 	                        }
 	                    }
