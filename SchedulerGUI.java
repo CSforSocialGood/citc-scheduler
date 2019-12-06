@@ -9,11 +9,14 @@ import java.awt.event.ActionListener;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import java.beans.ExceptionListener;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -219,6 +222,8 @@ public class SchedulerGUI extends JFrame implements ActionListener {
 		ArrayList<Teacher> teachers;
 		ArrayList<Volunteer> volunteers;
 		ArrayList<Driver> drivers;
+		int loops = 0;
+		int unassignedTolerance = 8;
 		while(true) {
 
 			Excel_Input.teachers = new ArrayList<>();
@@ -263,13 +268,21 @@ public class SchedulerGUI extends JFrame implements ActionListener {
 			for(Volunteer r : volunteers) {
 			    if(r.getAssignment() == null) c++;
 			}
-			System.out.println(c + " unassigned riders");
-			if(c <= 8) break;
+			System.out.println(c + " unassigned riders (tolerance = " + unassignedTolerance + " )");
+			if(loops % 10000 == 0) unassignedTolerance += 1;
+			if(c <= unassignedTolerance) break;
+			loops++;
 		}
-		// just for a test
 		try {
-			// TODO: GUI for output file location
-			Exportable.createTsvFile(drivers, "./out.tsv");
+			// export the TSV file
+			String tsvContents = Exportable.createTsv(drivers);
+			tsvContents += "\n\n\n";
+			tsvContents += Exportable.createTsv((List<Volunteer>) volunteers.stream().filter(x -> x.getAssignment() == null).collect(Collectors.toList()));
+
+			File outpath = new File(System.getProperty("user.home"), "./Desktop/out.tsv");
+			FileWriter fw = new FileWriter(outpath.getAbsolutePath(), false);
+			fw.write(tsvContents);
+			fw.close();
 		} catch (java.io.IOException e) {
 			// ruh roh
 		}

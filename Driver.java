@@ -54,34 +54,13 @@ public class Driver extends Volunteer implements Exportable {
 	    Volunteer v;
 	    String driverRiderTitle;
 		if(row == 0) {
-			v = this;
-			driverRiderTitle = "Driver";
+			return super.getValueForCell(0, column);
 		} else if (row == this.getRiders().size() + 1) {
 		    return ""; // blank row
 		} else {
 			v = this.getRiders().get(row - 1);
 			driverRiderTitle = "Rider";
 		}
-
-		switch(column) {
-			case 0:
-			    return (v.getCurry() ? "Curry " : " ") + driverRiderTitle;
-			case 1:
-				return v.getFirstName();
-			case 2:
-				return v.getLastName();
-			case 3:
-				return v.getPhoneNo();
-			case 4:
-				return v.getEmail();
-			case 5:
-				return getTeacher() != null ? getTeacher().getSchool() : "(none)";
-			case 6:
-				return getTeacher() != null ? getTeacher().getLastName() : "(none)";
-			case 7:
-				return v.getAssignment() != null ? v.getAssignment().toString() : "(none)";
-			default:
-				return "";
-		}
+		return v.getValueForCell(0, column);
 	}
 }

@@ -141,6 +141,8 @@ class TimeBlock {
                 overlapEndTime = this.getEndTime();
             }
 
+            if(Duration.between(overlapStartTime, overlapEndTime).compareTo(Duration.ofMinutes(60)) < 0) return null;
+
             return new TimeBlock(overlapStartTime, overlapEndTime);
         }
         return null;

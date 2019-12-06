@@ -2,6 +2,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public interface Exportable {
@@ -27,7 +28,7 @@ public interface Exportable {
         return in.replaceAll("\t", "\\t").replaceAll("\n", "\\n");
     }
 
-    public static String createTsv(ArrayList<? extends Exportable> objects) {
+    public static String createTsv(List<? extends Exportable> objects) {
         String out = "";
         for(Exportable obj : objects) {
             if(out.equals("")) {
@@ -47,7 +48,7 @@ public interface Exportable {
         return out;
     }
 
-    public static void createTsvFile(ArrayList<? extends Exportable> objects, String outFilePath) throws IOException {
+    public static void createTsvFile(List<? extends Exportable> objects, String outFilePath) throws IOException {
         String contents = createTsv(objects);
         FileWriter writer = new FileWriter(outFilePath, false);
         writer.write(contents);
