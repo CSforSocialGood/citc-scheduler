@@ -17,6 +17,7 @@ public class Volunteer extends Person implements Comparable, Exportable {
 		this.preferredSchool = preferredSchool;
 		this.isCurry = isCurry;
 		this.availability = new Availability();
+		this.bakerAvailability = new Availability();
 	}
 	public boolean getSpanish() {
 		return isSpanishSpeaking;
