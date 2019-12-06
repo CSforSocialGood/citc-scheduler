@@ -269,7 +269,7 @@ public class SchedulerGUI extends JFrame implements ActionListener {
 			    if(r.getAssignment() == null) c++;
 			}
 			System.out.println(c + " unassigned riders (tolerance = " + unassignedTolerance + " )");
-			if(loops % 10000 == 0) unassignedTolerance += 1;
+			if(loops % 1000 == 0) unassignedTolerance += 1;
 			if(c <= unassignedTolerance) break;
 			loops++;
 		}
@@ -279,13 +279,33 @@ public class SchedulerGUI extends JFrame implements ActionListener {
 			tsvContents += "\n\n\n";
 			tsvContents += Exportable.createTsv((List<Volunteer>) volunteers.stream().filter(x -> x.getAssignment() == null).collect(Collectors.toList()));
 
-			File outpath = new File(System.getProperty("user.home"), "./Desktop/out.tsv");
-			FileWriter fw = new FileWriter(outpath.getAbsolutePath(), false);
-			fw.write(tsvContents);
-			fw.close();
+			JFileChooser saveChooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+			saveChooser.removeChoosableFileFilter(saveChooser.getAcceptAllFileFilter());
+			saveChooser.addChoosableFileFilter(new FileNameExtensionFilter("TSV files (*.tsv)", "tsv"));
+			int r = saveChooser.showSaveDialog(null);
+			if(r == JFileChooser.APPROVE_OPTION) {
+				File outpath = saveChooser.getSelectedFile();
+				if(outpath.isDirectory()) outpath = new File(outpath, "out.tsv");
+				String[] parts = outpath.getName().split(".");
+				if(parts.length > 0) {
+					String extension = parts[parts.length - 1];
+					if(!extension.equals("tsv"))
+						outpath = new File(outpath.getParent(), outpath.getName() + ".tsv");
+				} else {
+					outpath = new File(outpath.getParent(), outpath.getName() + ".tsv");
+				}
+				FileWriter fw = new FileWriter(outpath.getAbsolutePath(), false);
+				fw.write(tsvContents);
+				fw.close();
+			}
+
 		} catch (java.io.IOException e) {
 			// ruh roh
+			JOptionPane.showMessageDialog(null,"There was an error! Exiting system now.");
+			System.exit(0);
 		}
+		JOptionPane.showMessageDialog(null,"The schedule has been saved successfully!");
+		System.exit(0);
 	}
 
 	public static void main(String[] args) throws IOException
